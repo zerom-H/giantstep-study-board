@@ -87,8 +87,9 @@
       * 삭제 한 후에는 해당 글의 상세 화면을 보여준다.
 ---
 ## 참고자료
-* [스프링 부트와 JPA 실무 완전 정복 로드맵](https://www.inflearn.com/roadmaps/149)    
-* [스프링 MVC 2편 - 백엔드 웹 개발 활용 기술](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-mvc-2)
-
+* 참고 강의
+  * [스프링 부트와 JPA 실무 완전 정복 로드맵](https://www.inflearn.com/roadmaps/149)
+  * [스프링 MVC 2편 - 백엔드 웹 개발 활용 기술](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-mvc-2)
+* ERD Diagram(Erd-Cloud) : [Study Board](https://www.erdcloud.com/d/YmStdwMBPuwhydRDb)
 ---
 
