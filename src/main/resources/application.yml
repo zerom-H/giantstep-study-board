@@ -1,0 +1,8 @@
+#MySql 세팅
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/giantstepstudyboard?serverTimezone=UTC&characterEncoding=UTF-8
+    username: root
+    password: 9071
+
