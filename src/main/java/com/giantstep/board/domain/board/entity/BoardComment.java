@@ -1,5 +1,6 @@
 package com.giantstep.board.domain.board.entity;
 
+import com.giantstep.board.global.audit.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "board_comment")
 @Entity
-public class BoardComment {
+public class BoardComment extends BaseTimeEntity {
 
     /** 댓글 번호 */
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
