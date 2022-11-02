@@ -28,7 +28,7 @@ public class Board extends BaseTimeEntity {
     private String contents;
 
     /** 글 비밀번호 */
-    private int password;
+    private String password;
 
     @OneToMany(mappedBy = "board")
     private List<BoardComment> boardComments = new ArrayList<>();
