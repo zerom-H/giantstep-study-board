@@ -17,8 +17,8 @@ public class Board extends BaseTimeEntity {
 
     /** 게시 글 번호 */
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "board_no")
-    private Long no;
+    @Column(name = "board_id")
+    private Long id;
     
     /** 작성자 */
     @Column(name = "board_writer", columnDefinition = "varchar(100)", nullable = false)
