@@ -1,5 +1,6 @@
 package com.giantstep.board.domain.board.entity;
 
+import com.giantstep.board.global.audit.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "board")
 @Entity
-public class Board {
+public class Board extends BaseTimeEntity {
 
     /** 게시 글 번호 */
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
