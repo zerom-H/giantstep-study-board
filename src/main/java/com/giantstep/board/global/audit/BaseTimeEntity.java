@@ -19,12 +19,11 @@ public class BaseTimeEntity {
     /** 생성일 */
     @CreatedDate
     @DateTimeFormat(pattern = "yyyy-MM-DD_HH:mm:ss")
-    @Column(nullable = false, updatable = false)
+    @Column(updatable = false)
     private LocalDateTime createDate;
 
     /** 수정일 */
     @LastModifiedDate
     @DateTimeFormat(pattern = "yyyy-MM-DD_HH:mm:ss")
-    @Column(nullable = false)
     private LocalDateTime updateDate;
 }
