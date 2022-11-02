@@ -23,7 +23,7 @@ public class BoardComment extends BaseTimeEntity {
     private String contents;
 
     /** 댓글 비밀번호 */
-    private int password;
+    private String password;
 
     /** 댓글의 게시 물 번호 */
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
