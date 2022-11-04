@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko", xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>AddForm</title>
+</head>
+<body>
+    <form action="/giantstep-study/board/boardAddForm" method="post">
+        <div>
+            <a>
+                제목 : <input type="text" th:name="title">
+            </a><br>
+            <a>
+                작성자 : <input type="text" th:name="writer">
+            </a><br>
+            <a>
+                내용 : <textarea th:name="contents"></textarea>
+            </a><br>
+            <a>
+                비밀번호 : <input type="text" th:name="password">
+            </a><br>
+        </div>
+        <div>
+            <input type="submit" value="작성완료">
+            <input type="button" value="취소" th:onclick="|location.href='@{/giantstep-study/board}'|">
+        </div>
+    </form>
+</body>
+</html>
