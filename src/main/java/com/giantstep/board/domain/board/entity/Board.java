@@ -2,6 +2,7 @@ package com.giantstep.board.domain.board.entity;
 
 import com.giantstep.board.global.audit.BaseTimeEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -32,5 +33,14 @@ public class Board extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "board")
     private List<BoardComment> boardComments = new ArrayList<>();
+
+    @Builder
+    public Board(Long id, String writer, String title, String contents, String password) {
+        this.id =  id;
+        this.writer = writer;
+        this.title = title;
+        this.contents = contents;
+        this.password = password;
+    }
 
 }
