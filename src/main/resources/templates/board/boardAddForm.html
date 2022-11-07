@@ -2,28 +2,60 @@
 <html lang="ko", xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 560px;
+        }
+        .field-error {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+    </style>
     <title>AddForm</title>
 </head>
 <body>
-    <form action="/giantstep-study/board/boardAddForm" method="post">
-        <div>
-            <a>
-                제목 : <input type="text" th:name="title">
-            </a><br>
-            <a>
-                작성자 : <input type="text" th:name="writer">
-            </a><br>
-            <a>
-                내용 : <textarea th:name="contents"></textarea>
-            </a><br>
-            <a>
-                비밀번호 : <input type="text" th:name="password">
-            </a><br>
-        </div>
-        <div>
-            <input type="submit" value="작성완료">
-            <input type="button" value="취소" th:onclick="|location.href='@{/giantstep-study/board}'|">
-        </div>
-    </form>
+    <div class="container">
+        <form action="/giantstep-study/board/boardAddForm" th:action th:object="${board}" method="post">
+
+
+            <div>
+                <label for="title" th:text="#{label.board.title}"></label>
+                <input type="text" id="title" th:field="*{title}"
+                       th:errorclass="field-error" class="form-control" placeholder="제목을 입력하세요">
+                <div class="field-error" th:errors="*{title}">
+                    제목 오류
+                </div>
+
+                <label for="wrter" th:text="#{label.board.writer}"></label>
+                <input type="text" id="wrter" th:field="*{writer}"
+                       th:errorclass="field-error" class="form-control" placeholder="작성자 입력하세요">
+                <div class="field-error" th:errors="*{writer}">
+                    작성자 오류
+                </div>
+
+                <label for="contents" th:text="#{label.board.contents}"></label>
+                <textarea type="text" id="contents" th:field="*{contents}" th:errorclass="field-error" class="form-control" placeholder="글 내용을 입력하세요"></textarea>
+                <div class="field-error" th:errors="*{contents}">
+                    글 내용 오류
+                </div>
+
+                <label for="password" th:text="#{label.board.password}"></label>
+                <input type="text" id="password" th:field="*{password}"
+                       th:errorclass="field-error" class="form-control" placeholder="글 비밀번호 입력하세요">
+                <div class="field-error" th:errors="*{password}">
+                    글 비밀번호 오류
+                </div>
+
+
+
+            </div>
+            <div>
+                <input type="submit" value="작성완료">
+                <input type="button" value="취소" th:onclick="|location.href='@{/giantstep-study/board}'|">
+            </div>
+        </form>
+    </div>
 </body>
 </html>
