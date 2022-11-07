@@ -29,7 +29,7 @@ public class BoardController {
 
     /** 게시 물 작성 완료 */
     @PostMapping("/boardAddForm")
-    public String boardwriteDone(@Valid @ModelAttribute("board") BoardAddFormDto boardAddFormDto, BindingResult bindingResult) {
+    public String boardWriteDone(@Valid @ModelAttribute("board") BoardAddFormDto boardAddFormDto, BindingResult bindingResult) {
 
         //검증 실패하면 다시 작성 폼으로
         if (bindingResult.hasErrors()) {
@@ -38,7 +38,7 @@ public class BoardController {
         }
 
         boardService.saveBoard(boardAddFormDto);
-        return "redirect:/giantstep-study/board";
+        return "board/boardList";
     }
 
 }
