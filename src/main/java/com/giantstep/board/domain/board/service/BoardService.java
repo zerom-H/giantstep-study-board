@@ -1,6 +1,7 @@
 package com.giantstep.board.domain.board.service;
 
 import com.giantstep.board.domain.board.controller.dto.BoardAddFormDto;
+import com.giantstep.board.domain.board.entity.Board;
 import com.giantstep.board.domain.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
 
     @Transactional
-    public Long saveBoard(BoardAddFormDto boardAddFormDto) {
-        return boardRepository.save(boardAddFormDto.toEntity()).getId();
+    public Long saveBoard(Board board) {
+        return boardRepository.save(board).getId();
     }
 }
