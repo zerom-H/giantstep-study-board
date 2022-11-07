@@ -11,7 +11,7 @@ import javax.validation.constraints.Pattern;
 @NoArgsConstructor
 public class BoardAddFormDto {
 
-    private Long id;
+    private Long boardId;
 
     @NotBlank(message = "작성자는 공백일 수 없습니다.")
     private String writer;
@@ -27,7 +27,7 @@ public class BoardAddFormDto {
 
     public Board toEntity() {
         Board board = Board.builder()
-                .id(id)
+                .id(boardId)
                 .writer(writer)
                 .title(title)
                 .contents(contents)
