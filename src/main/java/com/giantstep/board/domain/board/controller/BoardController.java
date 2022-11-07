@@ -36,8 +36,7 @@ public class BoardController {
             log.info("errors = {} ", bindingResult);
             return "board/boardAddForm";
         }
-
-        boardService.saveBoard(boardAddFormDto);
+        boardService.saveBoard(boardAddFormDto.toEntity());
         return "board/boardList";
     }
 
