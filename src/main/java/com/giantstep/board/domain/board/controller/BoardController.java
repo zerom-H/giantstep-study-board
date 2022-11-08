@@ -1,6 +1,6 @@
 package com.giantstep.board.domain.board.controller;
 
-import com.giantstep.board.domain.board.controller.dto.BoardAddFormDto;
+import com.giantstep.board.domain.board.dto.BoardAddFormDto;
 import com.giantstep.board.domain.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
