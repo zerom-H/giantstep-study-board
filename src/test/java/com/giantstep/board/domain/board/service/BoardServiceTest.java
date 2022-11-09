@@ -8,6 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -35,6 +37,20 @@ class BoardServiceTest {
         assertEquals(insert_board.getTitle(), findSaveBoard.getTitle());
         assertEquals(insert_board.getContents(), findSaveBoard.getContents());
         assertEquals(insert_board.getPassword(), findSaveBoard.getPassword());
+
+    }
+
+    @Test
+    public void 게시물_전체조회() {
+
+        //give
+        long boardListCount = boardRepository.count();
+
+        //when
+        List<Board> boardList = boardRepository.findAll();
+
+        //then
+        assertEquals(boardListCount, boardList.size());
 
     }
 }
