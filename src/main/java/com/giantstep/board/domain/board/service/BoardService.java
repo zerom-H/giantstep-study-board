@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class BoardService {
@@ -15,5 +17,9 @@ public class BoardService {
     @Transactional
     public Long saveBoard(Board board) {
         return boardRepository.save(board).getId();
+    }
+
+    public List<Board> findAllBoardList() {
+        return boardRepository.findAll();
     }
 }
