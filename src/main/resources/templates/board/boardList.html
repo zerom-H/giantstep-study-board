@@ -34,7 +34,11 @@
                 </tr>
             </tbody>
         </table>
-        <a th:href="@{/giantstep-study/board/boardAddForm}" th:class="btn-info" role="button">글쓰기</a>
+        <div class="col">
+            <button class="btn btn-primary btn-sm"
+                    th:onclick="|location.href='@{@{/giantstep-study/board/boardAddForm}}'|"
+                    type="button" th:text="#{label.board.list.create}">글쓰기</button>
+        </div>
     </div>
 </div>
 </body>
