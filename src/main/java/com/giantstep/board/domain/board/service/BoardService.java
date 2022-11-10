@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -21,5 +22,9 @@ public class BoardService {
 
     public List<Board> findAllBoardList() {
         return boardRepository.findAll();
+    }
+
+    public Board findByBoardId(Long boardId) {
+        return boardRepository.findById(boardId).get();
     }
 }

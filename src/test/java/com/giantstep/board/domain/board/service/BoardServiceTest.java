@@ -51,6 +51,21 @@ class BoardServiceTest {
 
         //then
         assertEquals(boardListCount, boardList.size());
+    }
 
+    @Test
+    public void 게시물_단건조회() {
+
+        //give
+        Board boardTest = new Board(
+                100L, "이정준", "단건조회 테스트1",
+                "단건조회 테스트1 입니다.", "1234");
+        Board saveBoardTest = boardRepository.save(boardTest);
+
+        //when
+        Board findBoardOne = boardRepository.findById(saveBoardTest.getId()).get();
+
+        //then
+        assertEquals(saveBoardTest, findBoardOne);
     }
 }

@@ -2,6 +2,8 @@ package com.giantstep.board.domain.board.controller;
 
 import com.giantstep.board.domain.board.dto.BoardAddFormDto;
 import com.giantstep.board.domain.board.dto.BoardListDto;
+import com.giantstep.board.domain.board.dto.BoardOneDetailDto;
+import com.giantstep.board.domain.board.entity.Board;
 import com.giantstep.board.domain.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +56,13 @@ public class BoardController {
         return "board/boardList";
     }
 
-
+    /** 게시 물 단건 상세조회 */
+    @GetMapping("/{boardId}/detail")
+    public String boardOneDetailView(@PathVariable("boardId") Long boardId,
+                                     Model model) {
+        model.addAttribute("boardOneDetail", new BoardOneDetailDto(boardService.findByBoardId(boardId)));
+        return "board/boardOneDetail";
+    }
 
 
 
