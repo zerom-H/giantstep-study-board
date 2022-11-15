@@ -14,7 +14,6 @@ public class BoardOneDetailDto {
     private String boardWriter;
     private String boardTitle;
     private String boardContents;
-    private LocalDateTime boardCreateDate;
     private LocalDateTime boardUpdateDate;
 
     public BoardOneDetailDto(Board board) {
@@ -22,7 +21,6 @@ public class BoardOneDetailDto {
         this.boardWriter = board.getWriter();
         this.boardTitle = board.getTitle();
         this.boardContents = board.getContents();
-        this.boardCreateDate = board.getCreateDate();
         this.boardUpdateDate = board.getUpdateDate();
     }
 }
