@@ -1,9 +1,7 @@
 package com.giantstep.board.domain.board.controller;
 
 import com.giantstep.board.domain.board.dto.BoardAddFormDto;
-import com.giantstep.board.domain.board.dto.BoardListDto;
 import com.giantstep.board.domain.board.dto.BoardOneDetailDto;
-import com.giantstep.board.domain.board.entity.Board;
 import com.giantstep.board.domain.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +11,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -45,14 +42,7 @@ public class BoardController {
     /** 게시 물 리스트 조회 */
     @GetMapping
     public String boardListView(Model model) {
-        model.addAttribute("boardList", boardService.findAllBoardList().stream()
-                .map(board -> new BoardListDto(
-                        board.getId(),
-                        board.getWriter(),
-                        board.getTitle(),
-                        board.getCreateDate()
-                ))
-                .collect(Collectors.toList()));
+        model.addAttribute("boardAllList" ,boardService.findAllBoardList());
         return "board/boardList";
     }
 
