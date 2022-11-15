@@ -1,5 +1,6 @@
 package com.giantstep.board.domain.board.service;
 
+import com.giantstep.board.domain.board.dto.BoardListDto;
 import com.giantstep.board.domain.board.entity.Board;
 import com.giantstep.board.domain.board.repository.BoardRepository;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,7 @@ class BoardServiceTest {
     BoardRepository boardRepository;
 
     @Test
-    public void 게시물_작성() {
+    void 게시물_작성() {
 
         //give
         Board insert_board = new Board(31L, "이정준", "테스트 작성", "게시 물 저장 테스트 입니다.", "1234");
@@ -41,20 +42,20 @@ class BoardServiceTest {
     }
 
     @Test
-    public void 게시물_전체조회() {
+    void 게시물_전체조회() {
 
         //give
         long boardListCount = boardRepository.count();
 
         //when
-        List<Board> boardList = boardRepository.findAll();
+        List<BoardListDto> boardListDtoList = boardRepository.findAllByBoardListDto();
 
         //then
-        assertEquals(boardListCount, boardList.size());
+        assertEquals(boardListCount, boardListDtoList.size());
     }
 
     @Test
-    public void 게시물_단건조회() {
+    void 게시물_단건조회() {
 
         //give
         Board boardTest = new Board(
