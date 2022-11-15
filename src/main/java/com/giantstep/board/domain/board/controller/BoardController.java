@@ -50,7 +50,7 @@ public class BoardController {
     @GetMapping("/{boardId}/detail")
     public String boardOneDetailView(@PathVariable("boardId") Long boardId,
                                      Model model) {
-        model.addAttribute("boardOneDetail", new BoardOneDetailDto(boardService.findByBoardId(boardId)));
+        model.addAttribute("boardOneDetail", boardService.findByBoardId(boardId));
         return "board/boardOneDetail";
     }
 
