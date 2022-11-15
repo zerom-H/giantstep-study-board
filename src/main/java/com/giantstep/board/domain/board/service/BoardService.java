@@ -1,6 +1,7 @@
 package com.giantstep.board.domain.board.service;
 
 import com.giantstep.board.domain.board.dto.BoardListDto;
+import com.giantstep.board.domain.board.dto.BoardOneDetailDto;
 import com.giantstep.board.domain.board.entity.Board;
 import com.giantstep.board.domain.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class BoardService {
         return boardRepository.findAllByBoardListDto();
     }
 
-    public Board findByBoardId(Long boardId) {
-        return boardRepository.findById(boardId).get();
+    public BoardOneDetailDto findByBoardId(Long boardId) {
+        return boardRepository.findByBoardOneDetailDto(boardId);
     }
 }
