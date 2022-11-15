@@ -44,15 +44,9 @@
     </div>
 
     <div>
-        <label for="boardCreateDate" th:text="#{label.board.createDate}">글 생성일</label>
-        <input type="text" id="boardCreateDate" name="boardCreateDate" class="form-control"
-               th:value="${#temporals.format(boardOneDetail.boardCreateDate, 'yyyy.MM.dd.hh:mm:ss')}" readonly>
-    </div>
-
-    <div>
         <label for="boardUpdateDate" th:text="#{label.board.updateDate}">글 수정일</label>
         <input type="text" id="boardUpdateDate" name="boardUpdateDate" class="form-control"
-               th:value="${#temporals.format(boardOneDetail.boardUpdateDate, 'yyyy.MM.dd.hh:mm:ss')}" readonly>
+               th:value="${boardOneDetail.boardUpdateDate}" readonly>
     </div>
 
     <hr class="my-4">
