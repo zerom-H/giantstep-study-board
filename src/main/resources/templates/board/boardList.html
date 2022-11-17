@@ -12,10 +12,10 @@
     <div>
         <table class="table-bordered">
             <thead>
-                <th>번호</th>
-                <th>제목</th>
-                <th>작성자</th>
-                <th>작성일</th>
+                <th><label th:text="#{label.board.id}"></label></th>
+                <th><label th:text="#{label.board.title}"></label></th>
+                <th><label th:text="#{label.board.writer}"></label></th>
+                <th><label th:text="#{label.board.updateDate}"></label></th>
             </thead>
             <tbody>
                 <tr th:each="boardList : ${boardAllList}">
