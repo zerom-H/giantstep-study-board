@@ -19,4 +19,8 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
             "b.id, b.writer, b.title, b.contents, b.updateDate)" +
             " from Board b where b.id = :boardId")
     BoardOneDetailDto findByBoardOneDetailDto(@Param("boardId") Long boardId);
+
+    @Query("select count(b.id) from Board b where b.id= :checkBoardId and b.password= :checkBoardPassword")
+    Long checkBoardPwd(@Param("checkBoardId") Long boardId, @Param("checkBoardPassword") String boardPassword);
+
 }

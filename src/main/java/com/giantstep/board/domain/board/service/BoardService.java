@@ -2,6 +2,8 @@ package com.giantstep.board.domain.board.service;
 
 import com.giantstep.board.domain.board.dto.BoardListDto;
 import com.giantstep.board.domain.board.dto.BoardOneDetailDto;
+import com.giantstep.board.domain.board.dto.BoardUpdateCheckPwdDto;
+import com.giantstep.board.domain.board.dto.BoardUpdateFormDto;
 import com.giantstep.board.domain.board.entity.Board;
 import com.giantstep.board.domain.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,5 +29,20 @@ public class BoardService {
 
     public BoardOneDetailDto findByBoardId(Long boardId) {
         return boardRepository.findByBoardOneDetailDto(boardId);
+    }
+
+    @Transactional
+    public Long updateBoard(BoardUpdateFormDto boardUpdateFormDto) {
+
+        Board board = boardRepository.findById(boardUpdateFormDto.getBoardId()).get();
+        board.updateBoardOne(
+                boardUpdateFormDto.getBoardTitle(),
+                boardUpdateFormDto.getBoardContents()
+        );
+        return board.getId();
+    }
+
+    public Long checkUpdateBoardPwd(BoardUpdateCheckPwdDto boardUpdateCheckPwdDto) {
+        return boardRepository.checkBoardPwd(boardUpdateCheckPwdDto.getBoardId(), boardUpdateCheckPwdDto.getBoardPassword());
     }
 }
