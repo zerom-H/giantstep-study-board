@@ -2,6 +2,7 @@ package com.giantstep.board.domain.board.service;
 
 import com.giantstep.board.domain.board.dto.BoardListDto;
 import com.giantstep.board.domain.board.dto.BoardOneDetailDto;
+import com.giantstep.board.domain.board.dto.BoardUpdateFormDto;
 import com.giantstep.board.domain.board.entity.Board;
 import com.giantstep.board.domain.board.repository.BoardRepository;
 import org.junit.jupiter.api.Test;
@@ -68,5 +69,51 @@ class BoardServiceTest {
 
         //then
         assertEquals(saveBoardTest.getId(), findBoardOneDetailDto.getBoardId());
+    }
+
+    @Test
+    void 게시물단건_수정_비밀번호_검증() {
+
+        //give
+        Board boardTest = new Board(
+                100L, "이정준", "단건조회 테스트1",
+                "단건조회 테스트1 입니다.", "1234");
+        Board saveBoardTest = boardRepository.save(boardTest);
+
+        String updateBoardInsertPassword = "1234";
+        Long updateBoardId = boardRepository.findByBoardOneDetailDto(saveBoardTest.getId()).getBoardId();
+
+        //when
+        Long checkBoardPwd = boardRepository.checkBoardPwd(updateBoardId, updateBoardInsertPassword);
+
+        //then
+        assertEquals(checkBoardPwd, 1);
+    }
+
+    @Test
+    void 게시물단건_수정하기() {
+
+        //give
+        Board boardTest = new Board(
+                100L, "이정준", "단건조회 테스트1",
+                "단건조회 테스트1 입니다.", "1234");
+        Board saveBoardTest = boardRepository.save(boardTest);
+
+        String updateBoardTitle = "수정한 단건조회 테스트1";
+        String updateBoardContents = "수정한 단건조회 테스트1 입니다.";
+
+        BoardUpdateFormDto boardUpdateFormDto = new BoardUpdateFormDto(saveBoardTest.getId(), saveBoardTest.getWriter(),
+                updateBoardTitle, updateBoardContents);
+
+        //when
+        Board findUpdateBoard = boardRepository.findById(boardUpdateFormDto.getBoardId()).get();
+        findUpdateBoard.updateBoardOne(
+                boardUpdateFormDto.getBoardTitle(),
+                boardUpdateFormDto.getBoardContents()
+        );
+
+        //then
+        assertEquals(findUpdateBoard.getTitle(), updateBoardTitle);
+        assertEquals(findUpdateBoard.getContents(), updateBoardContents);
     }
 }
