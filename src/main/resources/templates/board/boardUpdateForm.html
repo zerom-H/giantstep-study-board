@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko", xmlns:th="http://www.thymeleaf.org">
+<html lang="ko", xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
     <link th:href="@{/css/bootstrap.min.css}"
@@ -17,7 +17,7 @@
 </head>
 <body>
 <div class="container">
-    <form action="/giantstep-study/board/{boardId}/edite" name="editeBoard" th:action th:object="${boardOneUpdate}" method="post">
+    <form action="/giantstep-study/board/{boardId}/edit" name="editeBoard" th:action th:object="${boardOneUpdate}" method="post">
 
         <div class="py-5 text-center">
             <h2 th:text="#{label.board.oneDetailTitle}">글 상세보기</h2>
@@ -45,14 +45,25 @@
             <div class="field-error" th:errors="*{boardContents}">
                 글 내용 오류
             </div>
-
-
         </div>
         <div>
             <button id="checkPwd"  th:type="submit" >수정완료</button>
-            <input type="button" value="취소" th:onclick="|location.href='@{/giantstep-study/board}'|">
+            <input type="button" value="취소" th:onclick="|location.href='@{/giantstep-study/board/list}'|">
         </div>
     </form>
 </div>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        window.onload = function () {
+            let message = [[${message}]];
+
+            if (message != null){
+                alert(message);
+            }
+        }
+    </script>
+</th:block>
+
 </body>
 </html>
