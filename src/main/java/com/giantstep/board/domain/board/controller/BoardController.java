@@ -4,6 +4,7 @@ import com.giantstep.board.domain.board.dto.BoardAddFormDto;
 import com.giantstep.board.domain.board.dto.BoardUpdateCheckPwdDto;
 import com.giantstep.board.domain.board.dto.BoardUpdateFormDto;
 import com.giantstep.board.domain.board.service.BoardService;
+import com.giantstep.board.utils.UtilsMethod;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -16,39 +17,42 @@ import javax.validation.Valid;
 @Slf4j
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/giantstep-study/board")
-public class BoardController {
+@RequestMapping("giantstep-study/board")
+public class BoardController extends UtilsMethod {
 
     private final BoardService boardService;
 
     /** 게시 물 작성 */
-    @GetMapping("/boardAddForm")
+    @GetMapping("boardAddForm")
     public String boardAddForm(@ModelAttribute("board") BoardAddFormDto form){
         return "board/boardAddForm";
     }
 
     /** 게시 물 작성 완료 */
-    @PostMapping("/boardAddForm")
-    public String boardWriteDone(@Valid @ModelAttribute("board") BoardAddFormDto boardAddFormDto, BindingResult bindingResult) {
+    @PostMapping("boardAddForm")
+    public String boardWriteDone(@Valid @ModelAttribute("board") BoardAddFormDto boardAddFormDto
+            , BindingResult bindingResult, Model model) {
 
         //검증 실패하면 다시 작성 폼으로
         if (bindingResult.hasErrors()) {
             log.info("errors = {} ", bindingResult);
+            String message = "수정한 폼의 유효성 검사가 실패했습니다. 다시 입력하세요!";
+            model.addAttribute("message", message);
             return "board/boardAddForm";
         }
         boardService.saveBoard(boardAddFormDto.toEntity());
-        return "board/boardList";
+        return showMessageAndRedirectUri("게시물 등록이 완료되었습니다.","list", model);
     }
 
     /** 게시 물 리스트 조회 */
-    @GetMapping
+    @GetMapping("list")
     public String boardListView(Model model) {
         model.addAttribute("boardAllList" ,boardService.findAllBoardList());
         return "board/boardList";
     }
 
     /** 게시 물 단건 상세조회 */
-    @GetMapping("/{boardId}/detail")
+    @GetMapping("{boardId}/detail")
     public String boardOneDetailView(@PathVariable("boardId") Long boardId,
                                      Model model) {
         model.addAttribute("boardOneDetail", boardService.findByBoardId(boardId));
@@ -56,49 +60,45 @@ public class BoardController {
     }
 
     /** 게시 물 수정 */
-    @GetMapping("/{boardId}/edite")
+    @GetMapping("{boardId}/edit")
     public String boardOneEdite(@PathVariable("boardId") Long boardId, Model model) {
         model.addAttribute("boardOneUpdate", boardService.findByBoardId(boardId));
         return "board/boardUpdateForm";
     }
 
     @GetMapping("{boardId}/checkUpdateBoardPwd")
-    public String CheckPassWordUpdateBoard(@PathVariable("boardId") Long boardId, Model model,
+    public String checkPassWordUpdateBoard(@PathVariable("boardId") Long boardId, Model model,
                                            @ModelAttribute("checkUpdateBoardForm")BoardUpdateCheckPwdDto boardUpdateCheckPwdDto) {
         model.addAttribute("checkBoardId", boardService.findByBoardId(boardId).getBoardId());
         return "board/boardUpdatePwdCheck";
     }
     @PostMapping("{boardId}/checkUpdateBoardPwd")
-    public String CheckPassWordUpdateBoardDone(
+    public String checkPassWordUpdateBoardDone(Model model,
             @Valid @ModelAttribute("checkUpdateBoardForm")BoardUpdateCheckPwdDto boardUpdateCheckPwdDto,
             BindingResult bindingResult) {
 
-        //검증 실패하면 다시 검증 폼으로
-        if (bindingResult.hasErrors()) {
-            log.info("errors = {} ", bindingResult);
-            return "board/boardUpdatePwdCheck";
-        }
-
         Long checkBoardPwd = boardService.checkUpdateBoardPwd(boardUpdateCheckPwdDto);
         if (checkBoardPwd == 1){
-            return "redirect:/giantstep-study/board/{boardId}/edite";
+            return showMessageAndRedirectUri("비밀번호 검증에 성공했습니다. 다음 화면으로 이동합니다.", "edit", model);
         }
         else {
-            return "board/boardUpdatePwdCheck";
+            return showMessageAndRedirectUri("비밀번호 검증에 실패했습니다. 다시 입력하세요!", "checkUpdateBoardPwd", model);
         }
     }
 
     /** 변경 된 부분만 수정하기 */
-    @PostMapping("/{boardId}/edite")
+    @PostMapping("{boardId}/edit")
     public String boardOneEditeDone(@Valid @ModelAttribute("boardOneUpdate") BoardUpdateFormDto boardUpdateFormDto,
-                                    BindingResult bindingResult) {
+                                    BindingResult bindingResult, Model model) {
         //검증 실패하면 다시 작성 폼으로
         if (bindingResult.hasErrors()) {
             log.info("errors = {} ", bindingResult);
+            String message = "수정한 폼의 유효성 검사가 실패했습니다. 다시 입력하세요!";
+            model.addAttribute("message", message);
             return "board/boardUpdateForm";
         }
         boardService.updateBoard(boardUpdateFormDto);
-        return "redirect:/giantstep-study/board";
+        return showMessageAndRedirectUri("게시 물 수정에 성공했습니다.", "detail", model);
     }
 
 

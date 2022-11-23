@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko", xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+    <title>Message</title>
+</head>
+<body>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+
+        window.onload = function () {
+            let message = [[${message}]];
+            let redirectUri = [[${redirectUri}]];
+
+            if (message != null && redirectUri != null){
+                alert(message);
+                location.href = redirectUri;
+            }
+        }
+
+    </script>
+</th:block>
+
+</body>
