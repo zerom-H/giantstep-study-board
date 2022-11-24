@@ -1,5 +1,6 @@
 package com.giantstep.board.domain.board.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ public class BoardListDto {
     private String boardTitle;
     private LocalDateTime boardUpdateDate;
 
+    @QueryProjection
     public BoardListDto(Long boardId, String boardWriter, String boardTitle, LocalDateTime boardUpdateDate) {
         this.boardId = boardId;
         this.boardWriter = boardWriter;

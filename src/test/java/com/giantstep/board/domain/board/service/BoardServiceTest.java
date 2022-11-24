@@ -2,6 +2,7 @@ package com.giantstep.board.domain.board.service;
 
 import com.giantstep.board.domain.board.dto.BoardListDto;
 import com.giantstep.board.domain.board.dto.BoardOneDetailDto;
+import com.giantstep.board.domain.board.dto.BoardUpdateCheckPwdCondition;
 import com.giantstep.board.domain.board.dto.BoardUpdateFormDto;
 import com.giantstep.board.domain.board.entity.Board;
 import com.giantstep.board.domain.board.repository.BoardRepository;
@@ -27,7 +28,13 @@ class BoardServiceTest {
     void 게시물_작성() {
 
         //give
-        Board insert_board = new Board(31L, "이정준", "테스트 작성", "게시 물 저장 테스트 입니다.", "1234");
+        Board insert_board = Board.builder()
+                .id(116L)
+                .writer("이정준")
+                .title("단건조회 테스트1")
+                .contents("단건조회 테스트1 입니다.")
+                .password("1234")
+                .build();
 
         //when
         Long saveBoardId = boardRepository.save(insert_board).getId();
@@ -59,9 +66,13 @@ class BoardServiceTest {
     void 게시물_단건조회() {
 
         //give
-        Board boardTest = new Board(
-                100L, "이정준", "단건조회 테스트1",
-                "단건조회 테스트1 입니다.", "1234");
+        Board boardTest = Board.builder()
+                .id(100L)
+                .writer("이정준")
+                .title("단건조회 테스트1")
+                .contents("단건조회 테스트1 입니다.")
+                .password("1234")
+                .build();
         Board saveBoardTest = boardRepository.save(boardTest);
 
         //when
@@ -75,16 +86,26 @@ class BoardServiceTest {
     void 게시물단건_수정_비밀번호_검증() {
 
         //give
-        Board boardTest = new Board(
-                100L, "이정준", "단건조회 테스트1",
-                "단건조회 테스트1 입니다.", "1234");
+        Board boardTest = Board.builder()
+                .id(100L)
+                .writer("이정준")
+                .title("단건조회 테스트1")
+                .contents("단건조회 테스트1 입니다.")
+                .password("1234")
+                .build();
+
         Board saveBoardTest = boardRepository.save(boardTest);
 
         String updateBoardInsertPassword = "1234";
-        Long updateBoardId = boardRepository.findByBoardOneDetailDto(saveBoardTest.getId()).getBoardId();
+        Integer updateBoardId = (boardRepository.findByBoardOneDetailDto(saveBoardTest.getId()).getBoardId()).intValue();
+
+        BoardUpdateCheckPwdCondition boardUpdateCheckPwdCondition = BoardUpdateCheckPwdCondition.builder()
+                .boardId(updateBoardId)
+                .boardPassword(updateBoardInsertPassword)
+                .build();
 
         //when
-        Long checkBoardPwd = boardRepository.checkBoardPwd(updateBoardId, updateBoardInsertPassword);
+        Long checkBoardPwd = boardRepository.checkBoardPwd(boardUpdateCheckPwdCondition);
 
         //then
         assertEquals(checkBoardPwd, 1);
@@ -94,23 +115,28 @@ class BoardServiceTest {
     void 게시물단건_수정하기() {
 
         //give
-        Board boardTest = new Board(
-                100L, "이정준", "단건조회 테스트1",
-                "단건조회 테스트1 입니다.", "1234");
+        Board boardTest = Board.builder()
+                .id(100L)
+                .writer("이정준")
+                .title("단건조회 테스트1")
+                .contents("단건조회 테스트1 입니다.")
+                .password("1234")
+                .build();
         Board saveBoardTest = boardRepository.save(boardTest);
 
         String updateBoardTitle = "수정한 단건조회 테스트1";
         String updateBoardContents = "수정한 단건조회 테스트1 입니다.";
 
-        BoardUpdateFormDto boardUpdateFormDto = new BoardUpdateFormDto(saveBoardTest.getId(), saveBoardTest.getWriter(),
-                updateBoardTitle, updateBoardContents);
+        BoardUpdateFormDto boardUpdateFormDto = BoardUpdateFormDto.builder()
+                .boardId(saveBoardTest.getId())
+                .boardWriter(saveBoardTest.getWriter())
+                .boardTitle(updateBoardTitle)
+                .boardContents(updateBoardContents)
+                .boardPassword(saveBoardTest.getPassword())
+                .build();
 
         //when
-        Board findUpdateBoard = boardRepository.findById(boardUpdateFormDto.getBoardId()).get();
-        findUpdateBoard.updateBoardOne(
-                boardUpdateFormDto.getBoardTitle(),
-                boardUpdateFormDto.getBoardContents()
-        );
+        Board findUpdateBoard = boardRepository.findById(boardUpdateFormDto.getBoardId()).get().updateBoardOne(boardUpdateFormDto.toEntity());
 
         //then
         assertEquals(findUpdateBoard.getTitle(), updateBoardTitle);

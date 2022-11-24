@@ -1,12 +1,13 @@
 package com.giantstep.board.domain.board.dto;
 
+import com.giantstep.board.domain.board.entity.Board;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
 @Data
-@NoArgsConstructor
+@Builder
 public class BoardUpdateFormDto {
 
     private Long boardId;
@@ -19,10 +20,16 @@ public class BoardUpdateFormDto {
     @NotBlank(message = "글 내용은 공백일 수 없습니다.")
     private String boardContents;
 
-    public BoardUpdateFormDto(Long boardId, String boardWriter, String boardTitle, String boardContents) {
-        this.boardId = boardId;
-        this.boardWriter = boardWriter;
-        this.boardTitle = boardTitle;
-        this.boardContents = boardContents;
+    private String boardPassword;
+
+    public Board toEntity() {
+        Board board = Board.builder()
+                .id(boardId)
+                .writer(boardWriter)
+                .title(boardTitle)
+                .contents(boardContents)
+                .password(boardPassword)
+                .build();
+        return board;
     }
 }
