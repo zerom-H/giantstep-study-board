@@ -43,9 +43,10 @@ public class Board extends BaseTimeEntity {
         this.password = password;
     }
 
-    public void updateBoardOne(String title, String contents) {
-        this.title = title;
-        this.contents = contents;
+    public Board updateBoardOne(Board board) {
+        this.title = board.getTitle();
+        this.contents = board.getContents();
+        return board;
     }
 
 }

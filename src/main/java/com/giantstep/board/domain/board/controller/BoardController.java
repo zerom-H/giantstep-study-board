@@ -1,7 +1,7 @@
 package com.giantstep.board.domain.board.controller;
 
 import com.giantstep.board.domain.board.dto.BoardAddFormDto;
-import com.giantstep.board.domain.board.dto.BoardUpdateCheckPwdDto;
+import com.giantstep.board.domain.board.dto.BoardUpdateCheckPwdCondition;
 import com.giantstep.board.domain.board.dto.BoardUpdateFormDto;
 import com.giantstep.board.domain.board.service.BoardService;
 import com.giantstep.board.utils.UtilsMethod;
@@ -68,16 +68,15 @@ public class BoardController extends UtilsMethod {
 
     @GetMapping("{boardId}/checkUpdateBoardPwd")
     public String checkPassWordUpdateBoard(@PathVariable("boardId") Long boardId, Model model,
-                                           @ModelAttribute("checkUpdateBoardForm")BoardUpdateCheckPwdDto boardUpdateCheckPwdDto) {
+                                           @ModelAttribute("checkUpdateBoardCondition") BoardUpdateCheckPwdCondition boardUpdateCheckPwdCondition) {
         model.addAttribute("checkBoardId", boardService.findByBoardId(boardId).getBoardId());
         return "board/boardUpdatePwdCheck";
     }
     @PostMapping("{boardId}/checkUpdateBoardPwd")
     public String checkPassWordUpdateBoardDone(Model model,
-            @Valid @ModelAttribute("checkUpdateBoardForm")BoardUpdateCheckPwdDto boardUpdateCheckPwdDto,
-            BindingResult bindingResult) {
+            @Valid @ModelAttribute("checkUpdateBoardCondition")BoardUpdateCheckPwdCondition boardUpdateCheckPwdCondition) {
 
-        Long checkBoardPwd = boardService.checkUpdateBoardPwd(boardUpdateCheckPwdDto);
+        Long checkBoardPwd = boardService.checkUpdateBoardPwd(boardUpdateCheckPwdCondition);
         if (checkBoardPwd == 1){
             return showMessageAndRedirectUri("비밀번호 검증에 성공했습니다. 다음 화면으로 이동합니다.", "edit", model);
         }
@@ -86,7 +85,7 @@ public class BoardController extends UtilsMethod {
         }
     }
 
-    /** 변경 된 부분만 수정하기 */
+    /** 수정하기 */
     @PostMapping("{boardId}/edit")
     public String boardOneEditeDone(@Valid @ModelAttribute("boardOneUpdate") BoardUpdateFormDto boardUpdateFormDto,
                                     BindingResult bindingResult, Model model) {
@@ -97,7 +96,7 @@ public class BoardController extends UtilsMethod {
             model.addAttribute("message", message);
             return "board/boardUpdateForm";
         }
-        boardService.updateBoard(boardUpdateFormDto);
+        boardService.updateBoard(boardUpdateFormDto.toEntity());
         return showMessageAndRedirectUri("게시 물 수정에 성공했습니다.", "detail", model);
     }
 
