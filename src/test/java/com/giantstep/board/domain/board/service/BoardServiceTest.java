@@ -9,6 +9,9 @@ import com.giantstep.board.domain.board.repository.BoardRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -60,6 +63,26 @@ class BoardServiceTest {
 
         //then
         assertEquals(boardListCount, boardListDtoList.size());
+    }
+
+    @Test
+    void 게시물_전체조회_페이징처리추가() {
+
+        //give
+        Pageable pageable = PageRequest.of(0, 10);
+        int boardListCount = boardRepository.findAll().size();
+
+        //when
+        Page<BoardListDto> boardListDtoAddPaging = boardRepository.findAllByBoardListDtoAddPaging(pageable);
+
+        //then
+        assertEquals(boardListDtoAddPaging.getTotalElements(), boardListCount);
+        assertEquals(boardListDtoAddPaging.getTotalPages(), 6);
+        assertEquals(boardListDtoAddPaging.isFirst(), true);
+        assertEquals(boardListDtoAddPaging.hasNext(), true);
+        assertEquals(boardListDtoAddPaging.getNumber(), 0);
+        assertEquals(boardListDtoAddPaging.getSize(), 10);
+
     }
 
     @Test

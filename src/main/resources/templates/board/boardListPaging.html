@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko", xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        ul li{
+            list-style-type: none;
+            display: inline-block;
+            margin-right: 10px;
+        }
+    </style>
+    <title>boardList</title>
+</head>
+<body>
+<div th:class="container">
+    <div>
+        <table class="table-bordered">
+            <thead>
+            <th><label th:text="#{label.board.id}"></label></th>
+            <th><label th:text="#{label.board.title}"></label></th>
+            <th><label th:text="#{label.board.writer}"></label></th>
+            <th><label th:text="#{label.board.updateDate}"></label></th>
+            </thead>
+            <tbody>
+            <tr th:each="boardList : ${boardAllListPaging}">
+                <td>
+                    <a th:text="${boardList.getBoardId()}"></a>
+                </td>
+                <td>
+                    <a th:href="@{/giantstep-study/board/{boardId}/detail (boardId=${boardList.getBoardId()})}" th:text="${boardList.getBoardTitle()}"></a>
+                </td>
+                <td>
+                    <a th:text="${boardList.getBoardWriter()}"></a>
+                </td>
+                <td>
+                    <a th:text="${boardList.getBoardUpdateDate()}"></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div>
+            <ul class="pagination"
+                th:with="
+                startNo=${(boardAllListPaging.number/boardAllListPaging.getSize())*boardAllListPaging.getSize() + 1},
+                endNo=(${startNo + 9 < boardAllListPaging.totalPages ? startNo+9 : boardAllListPaging.totalPages})
+                ">
+                <li th:if="${!boardAllListPaging.first} ? hidden">
+                    <a th:href="@{listPaging(page=${boardAllListPaging.pageable.first().getPageNumber()+1})}">[처음]</a>
+                </li>
+
+                <li th:if="${boardAllListPaging.hasPrevious()} ? hidden">
+                    <a th:href="@{listPaging(page=${boardAllListPaging.number})}">[이전]</a>
+                </li>
+
+                <li th:each="pageNum : ${#numbers.sequence(startNo, endNo)}">
+                    <a th:href="@{listPaging(page=${pageNumStat.index+1})}" th:text="${pageNumStat.index+1}"></a>
+                </li>
+
+                <li th:if="${boardAllListPaging.hasNext()} ? hidden">
+                    <a th:href="@{listPaging(page=${boardAllListPaging.number+2})}">[다음]</a>
+                </li>
+
+                <li th:if="${!boardAllListPaging.last} ? hidden">
+                    <a th:href="@{listPaging(page=${boardAllListPaging.getTotalPages()})}">[마지막]</a>
+                </li>
+            </ul>
+
+            <ul>
+
+            </ul>
+        </div>
+        <div class="col">
+            <button class="btn btn-primary btn-sm"
+                    th:onclick="|location.href='@{boardAddForm}'|"
+                    type="button" th:text="#{label.board.list.create}">글쓰기</button>
+            <button class="btn btn-primary btn-sm"
+                    th:onclick="|location.href='@{/}'|"
+                    type="button" th:text="#{label.board.button.main}">메인으로</button>
+        </div>
+    </div>
+</div>
+</body>

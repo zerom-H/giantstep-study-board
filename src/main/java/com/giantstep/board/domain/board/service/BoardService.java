@@ -6,6 +6,9 @@ import com.giantstep.board.domain.board.dto.BoardUpdateCheckPwdCondition;
 import com.giantstep.board.domain.board.entity.Board;
 import com.giantstep.board.domain.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +27,12 @@ public class BoardService {
 
     public List<BoardListDto> findAllBoardList() {
         return boardRepository.findAllByBoardListDto();
+    }
+
+    public Page<BoardListDto> findAllBoardListPaging(Pageable pageable) {
+        int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber()-1);
+        pageable = PageRequest.of(page, pageable.getPageSize());
+        return boardRepository.findAllByBoardListDtoAddPaging(pageable);
     }
 
     public BoardOneDetailDto findByBoardId(Long boardId) {
