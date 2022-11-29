@@ -7,6 +7,8 @@ import com.giantstep.board.domain.board.service.BoardService;
 import com.giantstep.board.utils.UtilsMethod;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -49,6 +51,13 @@ public class BoardController extends UtilsMethod {
     public String boardListView(Model model) {
         model.addAttribute("boardAllList" ,boardService.findAllBoardList());
         return "board/boardList";
+    }
+
+    /** 게시 물 리스트 조회 Paging 처리 한 버전 */
+    @GetMapping("listPaging")
+    public String boardListViewPaging(Model model, @PageableDefault(size = 10) Pageable pageable) {
+        model.addAttribute("boardAllListPaging", boardService.findAllBoardListPaging(pageable));
+        return "board/boardListPaging";
     }
 
     /** 게시 물 단건 상세조회 */

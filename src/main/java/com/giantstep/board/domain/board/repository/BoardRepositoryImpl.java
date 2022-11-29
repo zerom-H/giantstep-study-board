@@ -3,6 +3,9 @@ package com.giantstep.board.domain.board.repository;
 import com.giantstep.board.domain.board.dto.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -29,6 +32,29 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .from(board)
                 .orderBy(board.updateDate.desc())
                 .fetch();
+    }
+
+    @Override
+    public Page<BoardListDto> findAllByBoardListDtoAddPaging(Pageable pageable) {
+
+        List<BoardListDto> boardListDtoPagingList = queryFactory
+                .select(new QBoardListDto(
+                        board.id,
+                        board.writer,
+                        board.title,
+                        board.updateDate
+                ))
+                .from(board)
+                .orderBy(board.updateDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long totalBoardListCount = queryFactory
+                .select(board.count())
+                .from(board).fetchOne();
+
+        return new PageImpl<>(boardListDtoPagingList, pageable, totalBoardListCount);
     }
 
     @Override
