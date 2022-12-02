@@ -2,7 +2,7 @@ package com.giantstep.board.domain.board.service;
 
 import com.giantstep.board.domain.board.dto.BoardListDto;
 import com.giantstep.board.domain.board.dto.BoardOneDetailDto;
-import com.giantstep.board.domain.board.dto.BoardUpdateCheckPwdCondition;
+import com.giantstep.board.domain.board.dto.BoardUpdateCheckCondition;
 import com.giantstep.board.domain.board.dto.BoardUpdateFormDto;
 import com.giantstep.board.domain.board.entity.Board;
 import com.giantstep.board.domain.board.repository.BoardRepository;
@@ -122,13 +122,13 @@ class BoardServiceTest {
         String updateBoardInsertPassword = "1234";
         Integer updateBoardId = (boardRepository.findByBoardOneDetailDto(saveBoardTest.getId()).getBoardId()).intValue();
 
-        BoardUpdateCheckPwdCondition boardUpdateCheckPwdCondition = BoardUpdateCheckPwdCondition.builder()
+        BoardUpdateCheckCondition boardUpdateCheckCondition = BoardUpdateCheckCondition.builder()
                 .boardId(updateBoardId)
                 .boardPassword(updateBoardInsertPassword)
                 .build();
 
         //when
-        Long checkBoardPwd = boardRepository.checkBoardPwd(boardUpdateCheckPwdCondition);
+        Long checkBoardPwd = boardRepository.checkBoardPwd(boardUpdateCheckCondition);
 
         //then
         assertEquals(checkBoardPwd, 1);

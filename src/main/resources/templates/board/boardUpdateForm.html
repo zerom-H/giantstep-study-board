@@ -17,7 +17,7 @@
 </head>
 <body>
 <div class="container">
-    <form action="/giantstep-study/board/{boardId}/edit" name="editeBoard" th:action th:object="${boardOneUpdate}" method="post">
+    <form action="/giantstep-study/board/update" name="editeBoard" th:object="${boardOneUpdate}" method="post">
 
         <div class="py-5 text-center">
             <h2 th:text="#{label.board.oneDetailTitle}">글 상세보기</h2>

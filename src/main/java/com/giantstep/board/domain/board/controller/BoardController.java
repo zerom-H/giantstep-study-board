@@ -1,7 +1,7 @@
 package com.giantstep.board.domain.board.controller;
 
 import com.giantstep.board.domain.board.dto.BoardAddFormDto;
-import com.giantstep.board.domain.board.dto.BoardUpdateCheckPwdCondition;
+import com.giantstep.board.domain.board.dto.BoardUpdateCheckCondition;
 import com.giantstep.board.domain.board.dto.BoardUpdateFormDto;
 import com.giantstep.board.domain.board.service.BoardService;
 import com.giantstep.board.utils.UtilsMethod;
@@ -43,7 +43,7 @@ public class BoardController extends UtilsMethod {
             return "board/boardAddForm";
         }
         boardService.saveBoard(boardAddFormDto.toEntity());
-        return showMessageAndRedirectUri("게시물 등록이 완료되었습니다.","list", model);
+        return showMessageAndRedirectUri("게시물 등록이 완료되었습니다.","listPaging", model);
     }
 
     /** 게시 물 리스트 조회 */
@@ -69,33 +69,33 @@ public class BoardController extends UtilsMethod {
     }
 
     /** 게시 물 수정 */
-    @GetMapping("{boardId}/edit")
+    @GetMapping("{boardId}/update")
     public String boardOneEdite(@PathVariable("boardId") Long boardId, Model model) {
         model.addAttribute("boardOneUpdate", boardService.findByBoardId(boardId));
         return "board/boardUpdateForm";
     }
 
-    @GetMapping("{boardId}/checkUpdateBoardPwd")
+    @GetMapping("{boardId}/checkUpdateBoardCondition")
     public String checkPassWordUpdateBoard(@PathVariable("boardId") Long boardId, Model model,
-                                           @ModelAttribute("checkUpdateBoardCondition") BoardUpdateCheckPwdCondition boardUpdateCheckPwdCondition) {
+                                           @ModelAttribute("checkUpdateBoardCondition") BoardUpdateCheckCondition boardUpdateCheckCondition) {
         model.addAttribute("checkBoardId", boardService.findByBoardId(boardId).getBoardId());
-        return "board/boardUpdatePwdCheck";
+        return "board/boardUpdateCheck";
     }
-    @PostMapping("{boardId}/checkUpdateBoardPwd")
+    @PostMapping("{boardId}/checkUpdateBoardCondition")
     public String checkPassWordUpdateBoardDone(Model model,
-            @Valid @ModelAttribute("checkUpdateBoardCondition")BoardUpdateCheckPwdCondition boardUpdateCheckPwdCondition) {
+            @Valid @ModelAttribute("checkUpdateBoardCondition") BoardUpdateCheckCondition boardUpdateCheckCondition) {
 
-        Long checkBoardPwd = boardService.checkUpdateBoardPwd(boardUpdateCheckPwdCondition);
+        Long checkBoardPwd = boardService.checkUpdateBoardPwd(boardUpdateCheckCondition);
         if (checkBoardPwd == 1){
-            return showMessageAndRedirectUri("비밀번호 검증에 성공했습니다. 다음 화면으로 이동합니다.", "edit", model);
+            return showMessageAndRedirectUri("비밀번호 검증에 성공했습니다. 다음 화면으로 이동합니다.", "update", model);
         }
         else {
-            return showMessageAndRedirectUri("비밀번호 검증에 실패했습니다. 다시 입력하세요!", "checkUpdateBoardPwd", model);
+            return showMessageAndRedirectUri("비밀번호 검증에 실패했습니다. 다시 입력하세요!", "checkUpdateBoardCondition", model);
         }
     }
 
     /** 수정하기 */
-    @PostMapping("{boardId}/edit")
+    @PostMapping("update")
     public String boardOneEditeDone(@Valid @ModelAttribute("boardOneUpdate") BoardUpdateFormDto boardUpdateFormDto,
                                     BindingResult bindingResult, Model model) {
         //검증 실패하면 다시 작성 폼으로
@@ -106,7 +106,7 @@ public class BoardController extends UtilsMethod {
             return "board/boardUpdateForm";
         }
         boardService.updateBoard(boardUpdateFormDto.toEntity());
-        return showMessageAndRedirectUri("게시 물 수정에 성공했습니다.", "detail", model);
+        return showMessageAndRedirectUri("게시 물 수정에 성공했습니다.", "listPaging", model);
     }
 
 
