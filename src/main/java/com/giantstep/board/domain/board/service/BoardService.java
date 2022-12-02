@@ -2,7 +2,7 @@ package com.giantstep.board.domain.board.service;
 
 import com.giantstep.board.domain.board.dto.BoardListDto;
 import com.giantstep.board.domain.board.dto.BoardOneDetailDto;
-import com.giantstep.board.domain.board.dto.BoardUpdateCheckPwdCondition;
+import com.giantstep.board.domain.board.dto.BoardUpdateCheckCondition;
 import com.giantstep.board.domain.board.entity.Board;
 import com.giantstep.board.domain.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +46,7 @@ public class BoardService {
         return findUpdateBoard.getId();
     }
 
-    public Long checkUpdateBoardPwd(BoardUpdateCheckPwdCondition boardUpdateCheckPwdCondition) {
-        return boardRepository.checkBoardPwd(boardUpdateCheckPwdCondition);
+    public Long checkUpdateBoardPwd(BoardUpdateCheckCondition boardUpdateCheckCondition) {
+        return boardRepository.checkBoardPwd(boardUpdateCheckCondition);
     }
 }

@@ -74,14 +74,14 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
     }
 
     @Override
-    public Long checkBoardPwd(BoardUpdateCheckPwdCondition boardUpdateCheckPwdCondition) {
+    public Long checkBoardPwd(BoardUpdateCheckCondition boardUpdateCheckCondition) {
         return queryFactory
                 .select(board.id.count()
                 )
                 .from(board)
                 .where(
-                        boardIdEq(boardUpdateCheckPwdCondition.getBoardId()),
-                        boardPasswordEq(boardUpdateCheckPwdCondition.getBoardPassword())
+                        boardIdEq(boardUpdateCheckCondition.getBoardId()),
+                        boardPasswordEq(boardUpdateCheckCondition.getBoardPassword())
                 )
                 .fetchOne();
     }

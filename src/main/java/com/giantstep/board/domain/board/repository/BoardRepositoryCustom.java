@@ -2,7 +2,7 @@ package com.giantstep.board.domain.board.repository;
 
 import com.giantstep.board.domain.board.dto.BoardListDto;
 import com.giantstep.board.domain.board.dto.BoardOneDetailDto;
-import com.giantstep.board.domain.board.dto.BoardUpdateCheckPwdCondition;
+import com.giantstep.board.domain.board.dto.BoardUpdateCheckCondition;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -16,5 +16,5 @@ public interface BoardRepositoryCustom {
 
     BoardOneDetailDto findByBoardOneDetailDto(Long boardId);
 
-    Long checkBoardPwd(BoardUpdateCheckPwdCondition boardUpdateCheckPwdCondition);
+    Long checkBoardPwd(BoardUpdateCheckCondition boardUpdateCheckCondition);
 }
