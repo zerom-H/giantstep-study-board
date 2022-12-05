@@ -30,11 +30,11 @@ class BoardServiceTest {
 
         //give
         Board insert_board = Board.builder()
-                .id(116L)
                 .writer("이정준")
                 .title("단건조회 테스트1")
                 .contents("단건조회 테스트1 입니다.")
                 .password("1234")
+                .boardStatus(BoardStatus.ALIVE)
                 .build();
 
         //when
@@ -54,13 +54,13 @@ class BoardServiceTest {
     void 게시물_전체조회() {
 
         //give
-        long boardListCount = boardRepository.count();
+        long boardListDtoCount = boardRepository.findAllByBoardListDto().stream().count();
 
         //when
         List<BoardListDto> boardListDtoList = boardRepository.findAllByBoardListDto();
 
         //then
-        assertEquals(boardListCount, boardListDtoList.size());
+        assertEquals(boardListDtoCount, boardListDtoList.size());
     }
 
     @Test
@@ -88,11 +88,11 @@ class BoardServiceTest {
 
         //give
         Board boardTest = Board.builder()
-                .id(100L)
                 .writer("이정준")
                 .title("단건조회 테스트1")
                 .contents("단건조회 테스트1 입니다.")
                 .password("1234")
+                .boardStatus(BoardStatus.ALIVE)
                 .build();
         Board saveBoardTest = boardRepository.save(boardTest);
 
@@ -108,11 +108,11 @@ class BoardServiceTest {
 
         //give
         Board boardTest = Board.builder()
-                .id(100L)
                 .writer("이정준")
                 .title("단건조회 테스트1")
                 .contents("단건조회 테스트1 입니다.")
                 .password("1234")
+                .boardStatus(BoardStatus.ALIVE)
                 .build();
 
         Board saveBoardTest = boardRepository.save(boardTest);
@@ -137,11 +137,11 @@ class BoardServiceTest {
 
         //give
         Board boardTest = Board.builder()
-                .id(100L)
                 .writer("이정준")
                 .title("단건조회 테스트1")
                 .contents("단건조회 테스트1 입니다.")
                 .password("1234")
+                .boardStatus(BoardStatus.ALIVE)
                 .build();
         Board saveBoardTest = boardRepository.save(boardTest);
 
@@ -169,7 +169,6 @@ class BoardServiceTest {
 
         //give
         Board boardTest = Board.builder()
-                .id(100L)
                 .writer("이정준")
                 .title("테스트1")
                 .contents("테스트1 입니다.")
@@ -199,7 +198,6 @@ class BoardServiceTest {
 
         //give
         Board boardTest = Board.builder()
-                .id(100L)
                 .writer("이정준")
                 .title("테스트1")
                 .contents("테스트1 입니다.")

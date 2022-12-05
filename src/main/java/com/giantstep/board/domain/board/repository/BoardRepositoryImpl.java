@@ -1,5 +1,6 @@
 package com.giantstep.board.domain.board.repository;
 
+import com.giantstep.board.domain.board.constant.BoardStatus;
 import com.giantstep.board.domain.board.dto.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -30,6 +31,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                         board.updateDate
                 ))
                 .from(board)
+                .where(board.boardStatus.eq(BoardStatus.ALIVE))
                 .orderBy(board.updateDate.desc())
                 .fetch();
     }
@@ -45,6 +47,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                         board.updateDate
                 ))
                 .from(board)
+                .where(board.boardStatus.eq(BoardStatus.ALIVE))
                 .orderBy(board.updateDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -69,7 +72,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                         board.updateDate
                 ))
                 .from(board)
-                .where(board.id.eq(boardId))
+                .where((board.id.eq(boardId)), board.boardStatus.eq(BoardStatus.ALIVE))
                 .fetchOne();
     }
 
@@ -81,7 +84,8 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .from(board)
                 .where(
                         boardIdEq(boardUpdateCheckCondition.getBoardId()),
-                        boardPasswordEq(boardUpdateCheckCondition.getBoardPassword())
+                        boardPasswordEq(boardUpdateCheckCondition.getBoardPassword()),
+                        board.boardStatus.eq(BoardStatus.ALIVE)
                 )
                 .fetchOne();
     }
@@ -94,7 +98,8 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .from(board)
                 .where(
                         boardIdEq(boardDeleteCheckCondition.getBoardId()),
-                        boardPasswordEq(boardDeleteCheckCondition.getBoardPassword())
+                        boardPasswordEq(boardDeleteCheckCondition.getBoardPassword()),
+                        board.boardStatus.eq(BoardStatus.ALIVE)
                 )
                 .fetchOne();
     }
