@@ -1,5 +1,7 @@
 package com.giantstep.board.domain.board.entity;
 
+import com.giantstep.board.domain.board.constant.BoardStatus;
+import com.giantstep.board.domain.board.constant.BoardStatusConverter;
 import com.giantstep.board.global.audit.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -31,21 +33,31 @@ public class Board extends BaseTimeEntity {
     /** 글 비밀번호 */
     private String password;
 
+    /** 글 상태 */
+    @Convert(converter = BoardStatusConverter.class)
+    private BoardStatus boardStatus; //글 상태 : ALIVE, DELETE
+
     @OneToMany(mappedBy = "board")
     private List<BoardComment> boardComments = new ArrayList<>();
 
     @Builder
-    public Board(Long id, String writer, String title, String contents, String password) {
+    public Board(Long id, String writer, String title, String contents, String password, BoardStatus boardStatus) {
         this.id =  id;
         this.writer = writer;
         this.title = title;
         this.contents = contents;
         this.password = password;
+        this.boardStatus = boardStatus;
     }
 
     public Board updateBoardOne(Board board) {
         this.title = board.getTitle();
         this.contents = board.getContents();
+        return board;
+    }
+
+    public Board deleteBoardOne(Board board) {
+        this.boardStatus = BoardStatus.DELETE;
         return board;
     }
 

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko", xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 560px;
+        }
+        .field-error {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+        .warning {
+            font-size: larger;
+            color: red;
+        }
+    </style>
+    <title>AddForm</title>
+</head>
+<body>
+<div class="container">
+    <form action="/giantstep-study/board/checkDeleteBoardCondition" name="editeBoard" th:object="${boardDeleteCheckCondition}" method="post">
+
+        <div class="py-5 text-center">
+            <h2 th:text="#{label.board.checkPwd}">글 비밀번호 확인</h2>
+        </div>
+
+        <div>
+            <label for="boardId" th:text="#{label.board.id}"> 글 번호</label>
+            <input type="text" id="boardId" class="form-control" th:field="*{boardId}"
+                   th:value="${checkBoardId}" readonly>
+        </div>
+
+        <div>
+            <label for="boardPassword" th:text="#{label.board.password}"></label>
+            <input type="text" id="boardPassword" th:field="*{boardPassword}"
+                   th:errorclass="field-error" class="form-control" placeholder="삭제 할 글 비밀번호를 정확히 입력하세요.">
+            <a class="warning"> 신중히 생각하시고 글 삭제 하실 지 결정하세요.</a>
+            <div class="field-error" th:errors="*{boardPassword}">
+                비밀번호 오류
+            </div>
+
+        </div>
+        <div>
+            <button id="checkPwd"  th:type="submit" th:text="#{label.board.checkPwd}">글 비밀번호 확인</button>
+            <input type="button" value="취소" th:onclick="|location.href='@{detail}'|">
+        </div>
+    </form>
+</div>
+</body>
+</html>

@@ -1,6 +1,7 @@
 package com.giantstep.board.domain.board.controller;
 
 import com.giantstep.board.domain.board.dto.BoardAddFormDto;
+import com.giantstep.board.domain.board.dto.BoardDeleteCheckCondition;
 import com.giantstep.board.domain.board.dto.BoardUpdateCheckCondition;
 import com.giantstep.board.domain.board.dto.BoardUpdateFormDto;
 import com.giantstep.board.domain.board.service.BoardService;
@@ -110,5 +111,26 @@ public class BoardController extends UtilsMethod {
     }
 
 
+    /** 삭제하기 */
+    @GetMapping("{boardId}/checkDeleteBoardCondition")
+    public String checkDeleteBoardCondition(@PathVariable("boardId") Long boardId, Model model,
+                                            @ModelAttribute("boardDeleteCheckCondition") BoardDeleteCheckCondition boardDeleteCheckCondition) {
+        model.addAttribute("checkBoardId", boardService.findByBoardId(boardId).getBoardId());
+        return "board/boardDeleteCheck";
+    }
+
+    @PostMapping("checkDeleteBoardCondition")
+    public String checkDeleteBoardConditionDone(Model model, @ModelAttribute("boardDeleteCheckCondition") BoardDeleteCheckCondition boardDeleteCheckCondition) {
+
+        Long checkDeleteBoardCondition = boardService.checkDeleteBoardCondition(boardDeleteCheckCondition);
+        if (checkDeleteBoardCondition == 1) {
+            boardService.deleteOneBoard(boardDeleteCheckCondition.toEntity());
+            return showMessageAndRedirectUri("글 삭제에 성공했습니다.", "listPaging", model);
+        }
+        else {
+            return showMessageAndRedirectUri("삭제할 게시 물 검증에 실패했습니다. 다시 확인하세요.",
+                    boardDeleteCheckCondition.getBoardId() + "/checkDeleteBoardCondition", model);
+        }
+    }
 
 }

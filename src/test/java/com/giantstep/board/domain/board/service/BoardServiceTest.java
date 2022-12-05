@@ -1,9 +1,7 @@
 package com.giantstep.board.domain.board.service;
 
-import com.giantstep.board.domain.board.dto.BoardListDto;
-import com.giantstep.board.domain.board.dto.BoardOneDetailDto;
-import com.giantstep.board.domain.board.dto.BoardUpdateCheckCondition;
-import com.giantstep.board.domain.board.dto.BoardUpdateFormDto;
+import com.giantstep.board.domain.board.constant.BoardStatus;
+import com.giantstep.board.domain.board.dto.*;
 import com.giantstep.board.domain.board.entity.Board;
 import com.giantstep.board.domain.board.repository.BoardRepository;
 import org.junit.jupiter.api.Test;
@@ -165,4 +163,61 @@ class BoardServiceTest {
         assertEquals(findUpdateBoard.getTitle(), updateBoardTitle);
         assertEquals(findUpdateBoard.getContents(), updateBoardContents);
     }
+
+    @Test
+    void 게시물단건_삭제_검증() {
+
+        //give
+        Board boardTest = Board.builder()
+                .id(100L)
+                .writer("이정준")
+                .title("테스트1")
+                .contents("테스트1 입니다.")
+                .password("1234")
+                .boardStatus(BoardStatus.ALIVE)
+                .build();
+
+        Board saveBoardTest = boardRepository.save(boardTest);
+
+        String deleteBoardInsertPassword = "1234";
+        Integer deleteBoardId = (boardRepository.findByBoardOneDetailDto(saveBoardTest.getId()).getBoardId()).intValue();
+
+        BoardDeleteCheckCondition boardDeleteCheckCondition = BoardDeleteCheckCondition.builder()
+                .boardId(deleteBoardId)
+                .boardPassword(deleteBoardInsertPassword)
+                .build();
+
+        //when
+        Long checkDeleteBoardCondition = boardRepository.checkDeleteBoardCondition(boardDeleteCheckCondition);
+
+        //then
+        assertEquals(checkDeleteBoardCondition, 1);
+    }
+
+    @Test
+    void 게시물단건_삭제하기() {
+
+        //give
+        Board boardTest = Board.builder()
+                .id(100L)
+                .writer("이정준")
+                .title("테스트1")
+                .contents("테스트1 입니다.")
+                .password("1234")
+                .boardStatus(BoardStatus.ALIVE)
+                .build();
+        Board saveBoardTest = boardRepository.save(boardTest);
+
+        BoardDeleteCheckCondition boardDeleteCheckCondition = BoardDeleteCheckCondition.builder()
+                .boardId(Math.toIntExact(saveBoardTest.getId()))
+                .boardPassword(saveBoardTest.getPassword())
+                .build();
+
+        //when
+        boardRepository.findById(boardDeleteCheckCondition.toEntity().getId()).get().deleteBoardOne(boardDeleteCheckCondition.toEntity());
+
+        //then
+        assertEquals(boardRepository.findById(saveBoardTest.getId()).get().getBoardStatus(), BoardStatus.DELETE);
+    }
+
 }

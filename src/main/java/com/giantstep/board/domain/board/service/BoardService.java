@@ -1,5 +1,6 @@
 package com.giantstep.board.domain.board.service;
 
+import com.giantstep.board.domain.board.dto.BoardDeleteCheckCondition;
 import com.giantstep.board.domain.board.dto.BoardListDto;
 import com.giantstep.board.domain.board.dto.BoardOneDetailDto;
 import com.giantstep.board.domain.board.dto.BoardUpdateCheckCondition;
@@ -49,4 +50,14 @@ public class BoardService {
     public Long checkUpdateBoardPwd(BoardUpdateCheckCondition boardUpdateCheckCondition) {
         return boardRepository.checkBoardPwd(boardUpdateCheckCondition);
     }
+
+    public Long checkDeleteBoardCondition(BoardDeleteCheckCondition boardDeleteCheckCondition) {
+        return boardRepository.checkDeleteBoardCondition(boardDeleteCheckCondition);
+    }
+
+    @Transactional
+    public void deleteOneBoard(Board deleteBoard) {
+        boardRepository.findById(deleteBoard.getId()).get().deleteBoardOne(deleteBoard);
+    }
+
 }

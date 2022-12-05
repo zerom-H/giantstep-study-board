@@ -1,5 +1,6 @@
 package com.giantstep.board.domain.board.dto;
 
+import com.giantstep.board.domain.board.constant.BoardStatus;
 import com.giantstep.board.domain.board.entity.Board;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,6 +33,7 @@ public class BoardAddFormDto {
                 .title(title)
                 .contents(contents)
                 .password(password)
+                .boardStatus(BoardStatus.ALIVE)
                 .build();
         return board;
     }

@@ -86,6 +86,19 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .fetchOne();
     }
 
+    @Override
+    public Long checkDeleteBoardCondition(BoardDeleteCheckCondition boardDeleteCheckCondition) {
+        return queryFactory
+                .select(board.id.count()
+                )
+                .from(board)
+                .where(
+                        boardIdEq(boardDeleteCheckCondition.getBoardId()),
+                        boardPasswordEq(boardDeleteCheckCondition.getBoardPassword())
+                )
+                .fetchOne();
+    }
+
     private BooleanExpression boardIdEq(Integer boardId) {
         return hasText(String.valueOf(boardId)) ? board.id.eq(Long.valueOf(boardId)) : null;
     }
