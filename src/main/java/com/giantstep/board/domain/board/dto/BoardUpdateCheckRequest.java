@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class BoardUpdateCheckCondition {
+public class BoardUpdateCheckRequest {
     private Integer boardId;
     private String boardPassword;
 }

@@ -1,9 +1,9 @@
 package com.giantstep.board.domain.board.repository;
 
-import com.giantstep.board.domain.board.dto.BoardDeleteCheckCondition;
+import com.giantstep.board.domain.board.dto.BoardDeleteCheckRequest;
 import com.giantstep.board.domain.board.dto.BoardListDto;
 import com.giantstep.board.domain.board.dto.BoardOneDetailDto;
-import com.giantstep.board.domain.board.dto.BoardUpdateCheckCondition;
+import com.giantstep.board.domain.board.dto.BoardUpdateCheckRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -17,7 +17,7 @@ public interface BoardRepositoryCustom {
 
     BoardOneDetailDto findByBoardOneDetailDto(Long boardId);
 
-    Long checkBoardPwd(BoardUpdateCheckCondition boardUpdateCheckCondition);
+    Long checkUpdateBoardRequest(BoardUpdateCheckRequest boardUpdateCheckRequest);
 
-    Long checkDeleteBoardCondition(BoardDeleteCheckCondition boardDeleteCheckCondition);
+    Long checkDeleteBoardRequest(BoardDeleteCheckRequest boardDeleteCheckRequest);
 }

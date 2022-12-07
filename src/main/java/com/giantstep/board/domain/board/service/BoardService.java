@@ -1,9 +1,9 @@
 package com.giantstep.board.domain.board.service;
 
-import com.giantstep.board.domain.board.dto.BoardDeleteCheckCondition;
+import com.giantstep.board.domain.board.dto.BoardDeleteCheckRequest;
 import com.giantstep.board.domain.board.dto.BoardListDto;
 import com.giantstep.board.domain.board.dto.BoardOneDetailDto;
-import com.giantstep.board.domain.board.dto.BoardUpdateCheckCondition;
+import com.giantstep.board.domain.board.dto.BoardUpdateCheckRequest;
 import com.giantstep.board.domain.board.entity.Board;
 import com.giantstep.board.domain.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -47,12 +47,12 @@ public class BoardService {
         return findUpdateBoard.getId();
     }
 
-    public Long checkUpdateBoardPwd(BoardUpdateCheckCondition boardUpdateCheckCondition) {
-        return boardRepository.checkBoardPwd(boardUpdateCheckCondition);
+    public Long checkUpdateBoardRequest(BoardUpdateCheckRequest boardUpdateCheckRequest) {
+        return boardRepository.checkUpdateBoardRequest(boardUpdateCheckRequest);
     }
 
-    public Long checkDeleteBoardCondition(BoardDeleteCheckCondition boardDeleteCheckCondition) {
-        return boardRepository.checkDeleteBoardCondition(boardDeleteCheckCondition);
+    public Long checkDeleteBoardRequest(BoardDeleteCheckRequest boardDeleteCheckRequest) {
+        return boardRepository.checkDeleteBoardRequest(boardDeleteCheckRequest);
     }
 
     @Transactional

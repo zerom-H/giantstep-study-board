@@ -17,7 +17,7 @@
 </head>
 <body>
 <div class="container">
-    <form action="/giantstep-study/board/{boardId}/checkUpdateBoardPwd" name="editeBoard" th:action th:object="${checkUpdateBoardCondition}" method="post">
+    <form action="/giantstep-study/board/{boardId}/checkUpdateBoardRequest" th:object="${checkUpdateBoardRequest}" method="post">
 
         <div class="py-5 text-center">
             <h2 th:text="#{label.board.checkPwd}">글 비밀번호 확인</h2>
@@ -40,7 +40,7 @@
         </div>
         <div>
             <button id="checkPwd"  th:type="submit" th:text="#{label.board.checkPwd}">글 비밀번호 확인</button>
-            <input type="button" value="취소" th:onclick="|location.href='@{/giantstep-study/board/list}'|">
+            <input type="button" value="취소" th:onclick="|location.href='@{detail}'|">
         </div>
     </form>
 </div>

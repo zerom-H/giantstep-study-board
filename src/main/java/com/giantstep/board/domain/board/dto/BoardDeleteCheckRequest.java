@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class BoardDeleteCheckCondition {
+public class BoardDeleteCheckRequest {
     private Integer boardId;
     private String boardPassword;
 
     @Builder
-    public BoardDeleteCheckCondition (Integer boardId, String boardPassword) {
+    public BoardDeleteCheckRequest(Integer boardId, String boardPassword) {
         this.boardId = boardId;
         this.boardPassword = boardPassword;
     }

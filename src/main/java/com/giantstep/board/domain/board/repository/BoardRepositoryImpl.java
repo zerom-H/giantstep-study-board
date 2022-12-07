@@ -1,6 +1,5 @@
 package com.giantstep.board.domain.board.repository;
 
-import com.giantstep.board.domain.board.constant.BoardStatus;
 import com.giantstep.board.domain.board.dto.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -31,7 +30,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                         board.updateDate
                 ))
                 .from(board)
-                .where(board.boardStatus.eq(BoardStatus.ALIVE))
                 .orderBy(board.updateDate.desc())
                 .fetch();
     }
@@ -47,7 +45,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                         board.updateDate
                 ))
                 .from(board)
-                .where(board.boardStatus.eq(BoardStatus.ALIVE))
                 .orderBy(board.updateDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -72,34 +69,32 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                         board.updateDate
                 ))
                 .from(board)
-                .where((board.id.eq(boardId)), board.boardStatus.eq(BoardStatus.ALIVE))
+                .where(board.id.eq(boardId))
                 .fetchOne();
     }
 
     @Override
-    public Long checkBoardPwd(BoardUpdateCheckCondition boardUpdateCheckCondition) {
+    public Long checkUpdateBoardRequest(BoardUpdateCheckRequest boardUpdateCheckRequest) {
         return queryFactory
                 .select(board.id.count()
                 )
                 .from(board)
                 .where(
-                        boardIdEq(boardUpdateCheckCondition.getBoardId()),
-                        boardPasswordEq(boardUpdateCheckCondition.getBoardPassword()),
-                        board.boardStatus.eq(BoardStatus.ALIVE)
+                        boardIdEq(boardUpdateCheckRequest.getBoardId()),
+                        boardPasswordEq(boardUpdateCheckRequest.getBoardPassword())
                 )
                 .fetchOne();
     }
 
     @Override
-    public Long checkDeleteBoardCondition(BoardDeleteCheckCondition boardDeleteCheckCondition) {
+    public Long checkDeleteBoardRequest(BoardDeleteCheckRequest boardDeleteCheckRequest) {
         return queryFactory
                 .select(board.id.count()
                 )
                 .from(board)
                 .where(
-                        boardIdEq(boardDeleteCheckCondition.getBoardId()),
-                        boardPasswordEq(boardDeleteCheckCondition.getBoardPassword()),
-                        board.boardStatus.eq(BoardStatus.ALIVE)
+                        boardIdEq(boardDeleteCheckRequest.getBoardId()),
+                        boardPasswordEq(boardDeleteCheckRequest.getBoardPassword())
                 )
                 .fetchOne();
     }

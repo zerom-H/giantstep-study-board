@@ -104,7 +104,7 @@ class BoardServiceTest {
     }
 
     @Test
-    void 게시물단건_수정_비밀번호_검증() {
+    void 게시물단건_수정_검증() {
 
         //give
         Board boardTest = Board.builder()
@@ -120,13 +120,13 @@ class BoardServiceTest {
         String updateBoardInsertPassword = "1234";
         Integer updateBoardId = (boardRepository.findByBoardOneDetailDto(saveBoardTest.getId()).getBoardId()).intValue();
 
-        BoardUpdateCheckCondition boardUpdateCheckCondition = BoardUpdateCheckCondition.builder()
+        BoardUpdateCheckRequest boardUpdateCheckRequest = BoardUpdateCheckRequest.builder()
                 .boardId(updateBoardId)
                 .boardPassword(updateBoardInsertPassword)
                 .build();
 
         //when
-        Long checkBoardPwd = boardRepository.checkBoardPwd(boardUpdateCheckCondition);
+        Long checkBoardPwd = boardRepository.checkUpdateBoardRequest(boardUpdateCheckRequest);
 
         //then
         assertEquals(checkBoardPwd, 1);
@@ -181,16 +181,16 @@ class BoardServiceTest {
         String deleteBoardInsertPassword = "1234";
         Integer deleteBoardId = (boardRepository.findByBoardOneDetailDto(saveBoardTest.getId()).getBoardId()).intValue();
 
-        BoardDeleteCheckCondition boardDeleteCheckCondition = BoardDeleteCheckCondition.builder()
+        BoardDeleteCheckRequest boardDeleteCheckRequest = BoardDeleteCheckRequest.builder()
                 .boardId(deleteBoardId)
                 .boardPassword(deleteBoardInsertPassword)
                 .build();
 
         //when
-        Long checkDeleteBoardCondition = boardRepository.checkDeleteBoardCondition(boardDeleteCheckCondition);
+        Long checkDeleteBoardRequest = boardRepository.checkDeleteBoardRequest(boardDeleteCheckRequest);
 
         //then
-        assertEquals(checkDeleteBoardCondition, 1);
+        assertEquals(checkDeleteBoardRequest, 1);
     }
 
     @Test
@@ -206,13 +206,13 @@ class BoardServiceTest {
                 .build();
         Board saveBoardTest = boardRepository.save(boardTest);
 
-        BoardDeleteCheckCondition boardDeleteCheckCondition = BoardDeleteCheckCondition.builder()
+        BoardDeleteCheckRequest boardDeleteCheckRequest = BoardDeleteCheckRequest.builder()
                 .boardId(Math.toIntExact(saveBoardTest.getId()))
                 .boardPassword(saveBoardTest.getPassword())
                 .build();
 
         //when
-        boardRepository.findById(boardDeleteCheckCondition.toEntity().getId()).get().deleteBoardOne(boardDeleteCheckCondition.toEntity());
+        boardRepository.findById(boardDeleteCheckRequest.toEntity().getId()).get().deleteBoardOne(boardDeleteCheckRequest.toEntity());
 
         //then
         assertEquals(boardRepository.findById(saveBoardTest.getId()).get().getBoardStatus(), BoardStatus.DELETE);

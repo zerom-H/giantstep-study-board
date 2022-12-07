@@ -1,8 +1,8 @@
 package com.giantstep.board.domain.board.controller;
 
 import com.giantstep.board.domain.board.dto.BoardAddFormDto;
-import com.giantstep.board.domain.board.dto.BoardDeleteCheckCondition;
-import com.giantstep.board.domain.board.dto.BoardUpdateCheckCondition;
+import com.giantstep.board.domain.board.dto.BoardDeleteCheckRequest;
+import com.giantstep.board.domain.board.dto.BoardUpdateCheckRequest;
 import com.giantstep.board.domain.board.dto.BoardUpdateFormDto;
 import com.giantstep.board.domain.board.service.BoardService;
 import com.giantstep.board.utils.UtilsMethod;
@@ -71,33 +71,33 @@ public class BoardController extends UtilsMethod {
 
     /** 게시 물 수정 */
     @GetMapping("{boardId}/update")
-    public String boardOneEdite(@PathVariable("boardId") Long boardId, Model model) {
+    public String boardOneUpdate(@PathVariable("boardId") Long boardId, Model model) {
         model.addAttribute("boardOneUpdate", boardService.findByBoardId(boardId));
         return "board/boardUpdateForm";
     }
 
-    @GetMapping("{boardId}/checkUpdateBoardCondition")
+    @GetMapping("{boardId}/checkUpdateBoardRequest")
     public String checkPassWordUpdateBoard(@PathVariable("boardId") Long boardId, Model model,
-                                           @ModelAttribute("checkUpdateBoardCondition") BoardUpdateCheckCondition boardUpdateCheckCondition) {
+                                           @ModelAttribute("checkUpdateBoardRequest") BoardUpdateCheckRequest boardUpdateCheckRequest) {
         model.addAttribute("checkBoardId", boardService.findByBoardId(boardId).getBoardId());
         return "board/boardUpdateCheck";
     }
-    @PostMapping("{boardId}/checkUpdateBoardCondition")
+    @PostMapping("{boardId}/checkUpdateBoardRequest")
     public String checkPassWordUpdateBoardDone(Model model,
-            @Valid @ModelAttribute("checkUpdateBoardCondition") BoardUpdateCheckCondition boardUpdateCheckCondition) {
+            @Valid @ModelAttribute("checkUpdateBoardRequest") BoardUpdateCheckRequest boardUpdateCheckRequest) {
 
-        Long checkBoardPwd = boardService.checkUpdateBoardPwd(boardUpdateCheckCondition);
-        if (checkBoardPwd == 1){
+        Long checkBoardRequest = boardService.checkUpdateBoardRequest(boardUpdateCheckRequest);
+        if (checkBoardRequest == 1){
             return showMessageAndRedirectUri("비밀번호 검증에 성공했습니다. 다음 화면으로 이동합니다.", "update", model);
         }
         else {
-            return showMessageAndRedirectUri("비밀번호 검증에 실패했습니다. 다시 입력하세요!", "checkUpdateBoardCondition", model);
+            return showMessageAndRedirectUri("비밀번호 검증에 실패했습니다. 다시 입력하세요!", "checkUpdateBoardRequest", model);
         }
     }
 
     /** 수정하기 */
     @PostMapping("update")
-    public String boardOneEditeDone(@Valid @ModelAttribute("boardOneUpdate") BoardUpdateFormDto boardUpdateFormDto,
+    public String boardOneUpdateDone(@Valid @ModelAttribute("boardOneUpdate") BoardUpdateFormDto boardUpdateFormDto,
                                     BindingResult bindingResult, Model model) {
         //검증 실패하면 다시 작성 폼으로
         if (bindingResult.hasErrors()) {
@@ -112,24 +112,24 @@ public class BoardController extends UtilsMethod {
 
 
     /** 삭제하기 */
-    @GetMapping("{boardId}/checkDeleteBoardCondition")
-    public String checkDeleteBoardCondition(@PathVariable("boardId") Long boardId, Model model,
-                                            @ModelAttribute("boardDeleteCheckCondition") BoardDeleteCheckCondition boardDeleteCheckCondition) {
+    @GetMapping("{boardId}/checkDeleteBoardRequest")
+    public String checkDeleteBoardRequest(@PathVariable("boardId") Long boardId, Model model,
+                                            @ModelAttribute("boardDeleteCheckRequest") BoardDeleteCheckRequest boardDeleteCheckRequest) {
         model.addAttribute("checkBoardId", boardService.findByBoardId(boardId).getBoardId());
         return "board/boardDeleteCheck";
     }
 
-    @PostMapping("checkDeleteBoardCondition")
-    public String checkDeleteBoardConditionDone(Model model, @ModelAttribute("boardDeleteCheckCondition") BoardDeleteCheckCondition boardDeleteCheckCondition) {
+    @PostMapping("checkDeleteBoardRequest")
+    public String checkDeleteBoardRequestDone(Model model, @ModelAttribute("boardDeleteCheckRequest") BoardDeleteCheckRequest boardDeleteCheckRequest) {
 
-        Long checkDeleteBoardCondition = boardService.checkDeleteBoardCondition(boardDeleteCheckCondition);
-        if (checkDeleteBoardCondition == 1) {
-            boardService.deleteOneBoard(boardDeleteCheckCondition.toEntity());
+        Long checkDeleteBoardRequest = boardService.checkDeleteBoardRequest(boardDeleteCheckRequest);
+        if (checkDeleteBoardRequest == 1) {
+            boardService.deleteOneBoard(boardDeleteCheckRequest.toEntity());
             return showMessageAndRedirectUri("글 삭제에 성공했습니다.", "listPaging", model);
         }
         else {
             return showMessageAndRedirectUri("삭제할 게시 물 검증에 실패했습니다. 다시 확인하세요.",
-                    boardDeleteCheckCondition.getBoardId() + "/checkDeleteBoardCondition", model);
+                    boardDeleteCheckRequest.getBoardId() + "/checkDeleteBoardRequest", model);
         }
     }
 
