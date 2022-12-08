@@ -34,20 +34,22 @@ public class Board extends BaseTimeEntity {
     private String password;
 
     /** 글 상태 */
-    @Convert(converter = BoardStatusConverter.class)
-    private BoardStatus boardStatus; //글 상태 : ALIVE, DELETE
+    private String deletedYn;
+//    @Convert(converter = BoardStatusConverter.class)
+//    private BoardStatus boardStatus; //글 상태 : ALIVE, DELETE
+
 
     @OneToMany(mappedBy = "board")
     private List<BoardComment> boardComments = new ArrayList<>();
 
     @Builder
-    public Board(Long id, String writer, String title, String contents, String password, BoardStatus boardStatus) {
+    public Board(Long id, String writer, String title, String contents, String password, String deletedYn) {
         this.id =  id;
         this.writer = writer;
         this.title = title;
         this.contents = contents;
         this.password = password;
-        this.boardStatus = boardStatus;
+        this.deletedYn = deletedYn;
     }
 
     public Board updateBoardOne(Board board) {
@@ -56,9 +58,8 @@ public class Board extends BaseTimeEntity {
         return board;
     }
 
-    public Board deleteBoardOne(Board board) {
-        this.boardStatus = BoardStatus.DELETE;
-        return board;
+    public void deleteBoardOne() {
+        this.deletedYn = "Y";
     }
 
 }

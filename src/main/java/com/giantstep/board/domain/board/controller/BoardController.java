@@ -86,8 +86,8 @@ public class BoardController extends UtilsMethod {
     public String checkPassWordUpdateBoardDone(Model model,
             @Valid @ModelAttribute("checkUpdateBoardRequest") BoardUpdateCheckRequest boardUpdateCheckRequest) {
 
-        Long checkBoardRequest = boardService.checkUpdateBoardRequest(boardUpdateCheckRequest);
-        if (checkBoardRequest == 1){
+        boolean checkBoardRequest = boardService.checkUpdateBoardRequest(boardUpdateCheckRequest.getBoardId(), boardUpdateCheckRequest.getBoardPassword());
+        if (checkBoardRequest == true){
             return showMessageAndRedirectUri("비밀번호 검증에 성공했습니다. 다음 화면으로 이동합니다.", "update", model);
         }
         else {
@@ -95,7 +95,6 @@ public class BoardController extends UtilsMethod {
         }
     }
 
-    /** 수정하기 */
     @PostMapping("update")
     public String boardOneUpdateDone(@Valid @ModelAttribute("boardOneUpdate") BoardUpdateFormDto boardUpdateFormDto,
                                     BindingResult bindingResult, Model model) {
@@ -122,9 +121,9 @@ public class BoardController extends UtilsMethod {
     @PostMapping("checkDeleteBoardRequest")
     public String checkDeleteBoardRequestDone(Model model, @ModelAttribute("boardDeleteCheckRequest") BoardDeleteCheckRequest boardDeleteCheckRequest) {
 
-        Long checkDeleteBoardRequest = boardService.checkDeleteBoardRequest(boardDeleteCheckRequest);
-        if (checkDeleteBoardRequest == 1) {
-            boardService.deleteOneBoard(boardDeleteCheckRequest.toEntity());
+        boolean checkDeleteBoardRequest = boardService.checkDeleteBoardRequest(boardDeleteCheckRequest.getBoardId(), boardDeleteCheckRequest.getBoardPassword());
+        if (checkDeleteBoardRequest == true) {
+            boardService.deleteOneBoard(boardDeleteCheckRequest.getBoardId());
             return showMessageAndRedirectUri("글 삭제에 성공했습니다.", "listPaging", model);
         }
         else {

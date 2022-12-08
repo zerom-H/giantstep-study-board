@@ -1,6 +1,5 @@
 package com.giantstep.board.domain.board.service;
 
-import com.giantstep.board.domain.board.constant.BoardStatus;
 import com.giantstep.board.domain.board.dto.*;
 import com.giantstep.board.domain.board.entity.Board;
 import com.giantstep.board.domain.board.repository.BoardRepository;
@@ -34,7 +33,7 @@ class BoardServiceTest {
                 .title("단건조회 테스트1")
                 .contents("단건조회 테스트1 입니다.")
                 .password("1234")
-                .boardStatus(BoardStatus.ALIVE)
+                .deletedYn("N")
                 .build();
 
         //when
@@ -92,7 +91,7 @@ class BoardServiceTest {
                 .title("단건조회 테스트1")
                 .contents("단건조회 테스트1 입니다.")
                 .password("1234")
-                .boardStatus(BoardStatus.ALIVE)
+                .deletedYn("N")
                 .build();
         Board saveBoardTest = boardRepository.save(boardTest);
 
@@ -112,24 +111,19 @@ class BoardServiceTest {
                 .title("단건조회 테스트1")
                 .contents("단건조회 테스트1 입니다.")
                 .password("1234")
-                .boardStatus(BoardStatus.ALIVE)
+                .deletedYn("N")
                 .build();
 
         Board saveBoardTest = boardRepository.save(boardTest);
 
         String updateBoardInsertPassword = "1234";
-        Integer updateBoardId = (boardRepository.findByBoardOneDetailDto(saveBoardTest.getId()).getBoardId()).intValue();
-
-        BoardUpdateCheckRequest boardUpdateCheckRequest = BoardUpdateCheckRequest.builder()
-                .boardId(updateBoardId)
-                .boardPassword(updateBoardInsertPassword)
-                .build();
+        Long updateBoardId = boardRepository.findByBoardOneDetailDto(saveBoardTest.getId()).getBoardId();
 
         //when
-        Long checkBoardPwd = boardRepository.checkUpdateBoardRequest(boardUpdateCheckRequest);
+        Boolean checkUpdateBoardRequest = boardRepository.existsByIdAndPasswordAndDeletedYn(updateBoardId, updateBoardInsertPassword, "N");
 
         //then
-        assertEquals(checkBoardPwd, 1);
+        assertEquals(checkUpdateBoardRequest, true);
     }
 
     @Test
@@ -141,7 +135,7 @@ class BoardServiceTest {
                 .title("단건조회 테스트1")
                 .contents("단건조회 테스트1 입니다.")
                 .password("1234")
-                .boardStatus(BoardStatus.ALIVE)
+                .deletedYn("N")
                 .build();
         Board saveBoardTest = boardRepository.save(boardTest);
 
@@ -173,24 +167,19 @@ class BoardServiceTest {
                 .title("테스트1")
                 .contents("테스트1 입니다.")
                 .password("1234")
-                .boardStatus(BoardStatus.ALIVE)
+                .deletedYn("N")
                 .build();
 
         Board saveBoardTest = boardRepository.save(boardTest);
 
         String deleteBoardInsertPassword = "1234";
-        Integer deleteBoardId = (boardRepository.findByBoardOneDetailDto(saveBoardTest.getId()).getBoardId()).intValue();
-
-        BoardDeleteCheckRequest boardDeleteCheckRequest = BoardDeleteCheckRequest.builder()
-                .boardId(deleteBoardId)
-                .boardPassword(deleteBoardInsertPassword)
-                .build();
+        Long deleteBoardId =boardRepository.findByBoardOneDetailDto(saveBoardTest.getId()).getBoardId();
 
         //when
-        Long checkDeleteBoardRequest = boardRepository.checkDeleteBoardRequest(boardDeleteCheckRequest);
+        Boolean checkDeleteBoardRequest = boardRepository.existsByIdAndPasswordAndDeletedYn(deleteBoardId, deleteBoardInsertPassword, "N");
 
         //then
-        assertEquals(checkDeleteBoardRequest, 1);
+        assertEquals(checkDeleteBoardRequest, true);
     }
 
     @Test
@@ -202,20 +191,18 @@ class BoardServiceTest {
                 .title("테스트1")
                 .contents("테스트1 입니다.")
                 .password("1234")
-                .boardStatus(BoardStatus.ALIVE)
+                .deletedYn("N")
                 .build();
+
         Board saveBoardTest = boardRepository.save(boardTest);
 
-        BoardDeleteCheckRequest boardDeleteCheckRequest = BoardDeleteCheckRequest.builder()
-                .boardId(Math.toIntExact(saveBoardTest.getId()))
-                .boardPassword(saveBoardTest.getPassword())
-                .build();
+        Long deleteBoardId = saveBoardTest.getId();
 
         //when
-        boardRepository.findById(boardDeleteCheckRequest.toEntity().getId()).get().deleteBoardOne(boardDeleteCheckRequest.toEntity());
+        boardRepository.findById(deleteBoardId).get().deleteBoardOne();
 
         //then
-        assertEquals(boardRepository.findById(saveBoardTest.getId()).get().getBoardStatus(), BoardStatus.DELETE);
+        assertEquals(boardRepository.findById(deleteBoardId).get().getDeletedYn(), "Y");
     }
 
 }

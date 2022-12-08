@@ -1,7 +1,6 @@
 package com.giantstep.board.domain.board.repository;
 
 import com.giantstep.board.domain.board.dto.*;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -10,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static org.springframework.util.StringUtils.hasText;
 import static com.giantstep.board.domain.board.entity.QBoard.*;
 
 public class BoardRepositoryImpl implements BoardRepositoryCustom{
@@ -30,6 +28,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                         board.updateDate
                 ))
                 .from(board)
+                .where(board.deletedYn.eq("N"))
                 .orderBy(board.updateDate.desc())
                 .fetch();
     }
@@ -45,6 +44,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                         board.updateDate
                 ))
                 .from(board)
+                .where(board.deletedYn.eq("N"))
                 .orderBy(board.updateDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -69,41 +69,9 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                         board.updateDate
                 ))
                 .from(board)
-                .where(board.id.eq(boardId))
-                .fetchOne();
-    }
-
-    @Override
-    public Long checkUpdateBoardRequest(BoardUpdateCheckRequest boardUpdateCheckRequest) {
-        return queryFactory
-                .select(board.id.count()
-                )
-                .from(board)
-                .where(
-                        boardIdEq(boardUpdateCheckRequest.getBoardId()),
-                        boardPasswordEq(boardUpdateCheckRequest.getBoardPassword())
+                .where(board.id.eq(boardId),
+                        board.deletedYn.eq("N")
                 )
                 .fetchOne();
-    }
-
-    @Override
-    public Long checkDeleteBoardRequest(BoardDeleteCheckRequest boardDeleteCheckRequest) {
-        return queryFactory
-                .select(board.id.count()
-                )
-                .from(board)
-                .where(
-                        boardIdEq(boardDeleteCheckRequest.getBoardId()),
-                        boardPasswordEq(boardDeleteCheckRequest.getBoardPassword())
-                )
-                .fetchOne();
-    }
-
-    private BooleanExpression boardIdEq(Integer boardId) {
-        return hasText(String.valueOf(boardId)) ? board.id.eq(Long.valueOf(boardId)) : null;
-    }
-
-    private BooleanExpression boardPasswordEq(String boardPassword) {
-        return hasText(boardPassword) ? board.password.eq(boardPassword) : null;
     }
 }

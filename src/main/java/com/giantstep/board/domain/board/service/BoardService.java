@@ -1,9 +1,7 @@
 package com.giantstep.board.domain.board.service;
 
-import com.giantstep.board.domain.board.dto.BoardDeleteCheckRequest;
 import com.giantstep.board.domain.board.dto.BoardListDto;
 import com.giantstep.board.domain.board.dto.BoardOneDetailDto;
-import com.giantstep.board.domain.board.dto.BoardUpdateCheckRequest;
 import com.giantstep.board.domain.board.entity.Board;
 import com.giantstep.board.domain.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -47,17 +45,17 @@ public class BoardService {
         return findUpdateBoard.getId();
     }
 
-    public Long checkUpdateBoardRequest(BoardUpdateCheckRequest boardUpdateCheckRequest) {
-        return boardRepository.checkUpdateBoardRequest(boardUpdateCheckRequest);
+    public Boolean checkUpdateBoardRequest(Long updateBoardId, String updateBoardPassword) {
+        return boardRepository.existsByIdAndPasswordAndDeletedYn(updateBoardId, updateBoardPassword, "N");
     }
 
-    public Long checkDeleteBoardRequest(BoardDeleteCheckRequest boardDeleteCheckRequest) {
-        return boardRepository.checkDeleteBoardRequest(boardDeleteCheckRequest);
+    public Boolean checkDeleteBoardRequest(Long deleteBoardId, String deletedBoardPassword) {
+        return boardRepository.existsByIdAndPasswordAndDeletedYn(deleteBoardId, deletedBoardPassword, "N");
     }
 
     @Transactional
-    public void deleteOneBoard(Board deleteBoard) {
-        boardRepository.findById(deleteBoard.getId()).get().deleteBoardOne(deleteBoard);
+    public void deleteOneBoard(Long deleteBoardId) {
+        boardRepository.findById(deleteBoardId).get().deleteBoardOne();
     }
 
 }

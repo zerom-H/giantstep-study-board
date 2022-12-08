@@ -25,4 +25,5 @@ public interface BoardRepository extends JpaRepository<Board, Long>, BoardReposi
 //    @Query("select count(b.id) from Board b where b.id= :checkBoardId and b.password= :checkBoardPassword")
 //    Long checkBoardPwd(@Param("checkBoardId") Long boardId, @Param("checkBoardPassword") String boardPassword);
 
+    Boolean existsByIdAndPasswordAndDeletedYn(Long boardId, String boardPassword, String deletedYn);
 }

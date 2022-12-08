@@ -13,6 +13,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import static org.junit.jupiter.api.Assertions.*;
+/*
 
 @SpringBootTest
 @Transactional
@@ -25,7 +26,9 @@ class BoardStatusConverterTest {
     @PersistenceContext
     private EntityManager em;
 
-    /** convert 테스트하기 위해서 리포지토리에 별도의 Querydsl 메소드를 만들지 않고 EntityManager 를 활용한 native query 를 활용해서 컨버터 검증 */
+    */
+/** convert 테스트하기 위해서 리포지토리에 별도의 Querydsl 메소드를 만들지 않고 EntityManager 를 활용한 native query 를 활용해서 컨버터 검증 *//*
+
     @Test
     void attribute_컨버터_테스트() {
 
@@ -54,4 +57,4 @@ class BoardStatusConverterTest {
         assertEquals(resultDesc, "작성");
     }
 
-}
+}*/

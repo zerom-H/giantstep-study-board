@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 @Builder
 public class BoardUpdateCheckRequest {
-    private Integer boardId;
+    private Long boardId;
     private String boardPassword;
 }
