@@ -95,7 +95,7 @@ public class BoardController extends UtilsMethod {
         }
     }
 
-    @PostMapping("update")
+    @PostMapping("{boardId}/update")
     public String boardOneUpdateDone(@Valid @ModelAttribute("boardOneUpdate") BoardUpdateFormDto boardUpdateFormDto,
                                     BindingResult bindingResult, Model model) {
         //검증 실패하면 다시 작성 폼으로
@@ -106,7 +106,7 @@ public class BoardController extends UtilsMethod {
             return "board/boardUpdateForm";
         }
         boardService.updateBoard(boardUpdateFormDto.toEntity());
-        return showMessageAndRedirectUri("게시 물 수정에 성공했습니다.", "listPaging", model);
+        return showMessageAndRedirectUri("게시 물 수정에 성공했습니다.", "detail", model);
     }
 
 
