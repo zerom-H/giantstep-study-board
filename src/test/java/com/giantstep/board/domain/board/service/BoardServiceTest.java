@@ -1,9 +1,6 @@
 package com.giantstep.board.domain.board.service;
 
-import com.giantstep.board.domain.board.dto.BoardListDto;
-import com.giantstep.board.domain.board.dto.BoardOneDetailDto;
-import com.giantstep.board.domain.board.dto.BoardUpdateCheckPwdCondition;
-import com.giantstep.board.domain.board.dto.BoardUpdateFormDto;
+import com.giantstep.board.domain.board.dto.*;
 import com.giantstep.board.domain.board.entity.Board;
 import com.giantstep.board.domain.board.repository.BoardRepository;
 import org.junit.jupiter.api.Test;
@@ -32,11 +29,11 @@ class BoardServiceTest {
 
         //give
         Board insert_board = Board.builder()
-                .id(116L)
                 .writer("이정준")
                 .title("단건조회 테스트1")
                 .contents("단건조회 테스트1 입니다.")
                 .password("1234")
+                .deletedYn("N")
                 .build();
 
         //when
@@ -56,13 +53,13 @@ class BoardServiceTest {
     void 게시물_전체조회() {
 
         //give
-        long boardListCount = boardRepository.count();
+        long boardListDtoCount = boardRepository.findAllByBoardListDto().stream().count();
 
         //when
         List<BoardListDto> boardListDtoList = boardRepository.findAllByBoardListDto();
 
         //then
-        assertEquals(boardListCount, boardListDtoList.size());
+        assertEquals(boardListDtoCount, boardListDtoList.size());
     }
 
     @Test
@@ -90,11 +87,11 @@ class BoardServiceTest {
 
         //give
         Board boardTest = Board.builder()
-                .id(100L)
                 .writer("이정준")
                 .title("단건조회 테스트1")
                 .contents("단건조회 테스트1 입니다.")
                 .password("1234")
+                .deletedYn("N")
                 .build();
         Board saveBoardTest = boardRepository.save(boardTest);
 
@@ -106,32 +103,27 @@ class BoardServiceTest {
     }
 
     @Test
-    void 게시물단건_수정_비밀번호_검증() {
+    void 게시물단건_수정_검증() {
 
         //give
         Board boardTest = Board.builder()
-                .id(100L)
                 .writer("이정준")
                 .title("단건조회 테스트1")
                 .contents("단건조회 테스트1 입니다.")
                 .password("1234")
+                .deletedYn("N")
                 .build();
 
         Board saveBoardTest = boardRepository.save(boardTest);
 
         String updateBoardInsertPassword = "1234";
-        Integer updateBoardId = (boardRepository.findByBoardOneDetailDto(saveBoardTest.getId()).getBoardId()).intValue();
-
-        BoardUpdateCheckPwdCondition boardUpdateCheckPwdCondition = BoardUpdateCheckPwdCondition.builder()
-                .boardId(updateBoardId)
-                .boardPassword(updateBoardInsertPassword)
-                .build();
+        Long updateBoardId = boardRepository.findByBoardOneDetailDto(saveBoardTest.getId()).getBoardId();
 
         //when
-        Long checkBoardPwd = boardRepository.checkBoardPwd(boardUpdateCheckPwdCondition);
+        Boolean checkUpdateBoardRequest = boardRepository.existsByIdAndPasswordAndDeletedYn(updateBoardId, updateBoardInsertPassword, "N");
 
         //then
-        assertEquals(checkBoardPwd, 1);
+        assertEquals(checkUpdateBoardRequest, true);
     }
 
     @Test
@@ -139,11 +131,11 @@ class BoardServiceTest {
 
         //give
         Board boardTest = Board.builder()
-                .id(100L)
                 .writer("이정준")
                 .title("단건조회 테스트1")
                 .contents("단건조회 테스트1 입니다.")
                 .password("1234")
+                .deletedYn("N")
                 .build();
         Board saveBoardTest = boardRepository.save(boardTest);
 
@@ -165,4 +157,52 @@ class BoardServiceTest {
         assertEquals(findUpdateBoard.getTitle(), updateBoardTitle);
         assertEquals(findUpdateBoard.getContents(), updateBoardContents);
     }
+
+    @Test
+    void 게시물단건_삭제_검증() {
+
+        //give
+        Board boardTest = Board.builder()
+                .writer("이정준")
+                .title("테스트1")
+                .contents("테스트1 입니다.")
+                .password("1234")
+                .deletedYn("N")
+                .build();
+
+        Board saveBoardTest = boardRepository.save(boardTest);
+
+        String deleteBoardInsertPassword = "1234";
+        Long deleteBoardId =boardRepository.findByBoardOneDetailDto(saveBoardTest.getId()).getBoardId();
+
+        //when
+        Boolean checkDeleteBoardRequest = boardRepository.existsByIdAndPasswordAndDeletedYn(deleteBoardId, deleteBoardInsertPassword, "N");
+
+        //then
+        assertEquals(checkDeleteBoardRequest, true);
+    }
+
+    @Test
+    void 게시물단건_삭제하기() {
+
+        //give
+        Board boardTest = Board.builder()
+                .writer("이정준")
+                .title("테스트1")
+                .contents("테스트1 입니다.")
+                .password("1234")
+                .deletedYn("N")
+                .build();
+
+        Board saveBoardTest = boardRepository.save(boardTest);
+
+        Long deleteBoardId = saveBoardTest.getId();
+
+        //when
+        boardRepository.findById(deleteBoardId).get().deleteBoardOne();
+
+        //then
+        assertEquals(boardRepository.findById(deleteBoardId).get().getDeletedYn(), "Y");
+    }
+
 }

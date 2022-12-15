@@ -54,19 +54,19 @@
     <div class="row">
         <div class="col">
             <button class="w-100 btn btn-primary btn-lg"
-                    th:onclick="|location.href='@{checkUpdateBoardPwd}'|"
+                    th:onclick="|location.href='@{checkUpdateBoardRequest}'|"
                     type="button" th:text="#{label.board.button.updateBoard}">글 수정</button>
         </div>
 
         <div class="col">
             <button class="w-100 btn btn-danger btn-lg"
-                    th:onclick="|location.href='@{}'|"
+                    th:onclick="|location.href='@{checkDeleteBoardRequest}'|"
                     type="button" th:text="#{label.board.button.deleteBoard}">글 삭제</button>
         </div>
 
         <div class="col">
             <button class="w-100 btn btn-secondary btn-lg" th:onclick="|location.href='@{/giantstep-study/board/listPaging}'|"
-                    th:text="#{label.board.button.list}">목록으로</button>
+                    type="button" th:text="#{label.board.button.list}">목록으로</button>
         </div>
     </div>
 

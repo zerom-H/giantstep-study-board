@@ -32,6 +32,7 @@ public class BoardAddFormDto {
                 .title(title)
                 .contents(contents)
                 .password(password)
+                .deletedYn("N")
                 .build();
         return board;
     }
