@@ -68,9 +68,10 @@ class BoardServiceTest {
         //give
         Pageable pageable = PageRequest.of(0, 10);
         int boardListCount = boardRepository.findAll().size();
+        BoardSearchCondition boardSearchCondition = new BoardSearchCondition();
 
         //when
-        Page<BoardListDto> boardListDtoAddPaging = boardRepository.findAllByBoardListDtoAddPaging(pageable);
+        Page<BoardListDto> boardListDtoAddPaging = boardRepository.findAllByBoardListDtoAddPaging(pageable, boardSearchCondition);
 
         //then
         assertEquals(boardListDtoAddPaging.getTotalElements(), boardListCount);
@@ -79,6 +80,27 @@ class BoardServiceTest {
         assertEquals(boardListDtoAddPaging.hasNext(), true);
         assertEquals(boardListDtoAddPaging.getNumber(), 0);
         assertEquals(boardListDtoAddPaging.getSize(), 10);
+
+    }
+
+    @Test
+    void 게시물_검색() {
+
+        //give
+        Pageable pageable = PageRequest.of(0, 10);
+        BoardSearchCondition boardSearchCondition = new BoardSearchCondition();
+        boardSearchCondition.setType("writer");
+        boardSearchCondition.setKeyWord("리정준");
+        boardSearchCondition.setSize(5);
+
+        pageable = PageRequest.of(pageable.getPageNumber(), boardSearchCondition.getSize());
+
+        //when
+        Page<BoardListDto> boardListDtoAddPaging = boardRepository.findAllByBoardListDtoAddPaging(pageable, boardSearchCondition);
+
+        //then
+        assertEquals(boardListDtoAddPaging.getTotalElements(), 0);
+        assertEquals(boardListDtoAddPaging.getSize(), 5);
 
     }
 

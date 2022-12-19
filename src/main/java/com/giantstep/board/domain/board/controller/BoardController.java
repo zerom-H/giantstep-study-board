@@ -1,9 +1,6 @@
 package com.giantstep.board.domain.board.controller;
 
-import com.giantstep.board.domain.board.dto.BoardAddFormDto;
-import com.giantstep.board.domain.board.dto.BoardDeleteCheckRequest;
-import com.giantstep.board.domain.board.dto.BoardUpdateCheckRequest;
-import com.giantstep.board.domain.board.dto.BoardUpdateFormDto;
+import com.giantstep.board.domain.board.dto.*;
 import com.giantstep.board.domain.board.service.BoardService;
 import com.giantstep.board.utils.UtilsMethod;
 import lombok.RequiredArgsConstructor;
@@ -54,10 +51,11 @@ public class BoardController extends UtilsMethod {
         return "board/boardList";
     }
 
-    /** 게시 물 리스트 조회 Paging 처리 한 버전 */
+    /** 게시 물 리스트 조회 Paging 처리, 검색기능 추가 한 버전 */
     @GetMapping("listPaging")
-    public String boardListViewPaging(Model model, @PageableDefault(size = 10) Pageable pageable) {
-        model.addAttribute("boardAllListPaging", boardService.findAllBoardListPaging(pageable));
+    public String boardListViewPaging(Model model, @PageableDefault(size = 10) Pageable pageable,
+                                      @ModelAttribute(name = "searchCondition") BoardSearchCondition boardSearchCondition) {
+        model.addAttribute("boardAllListPaging", boardService.findAllBoardListPaging(pageable, boardSearchCondition));
         return "board/boardListPaging";
     }
 

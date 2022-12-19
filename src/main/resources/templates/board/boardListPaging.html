@@ -15,6 +15,23 @@
 </head>
 <body>
 <div th:class="container">
+
+    <div th:name="search_bar">
+        <form th:action th:method="GET">
+            <select th:field="*{searchCondition.type}">
+                <option th:value="writer">작성자</option>
+                <option th:value="title">제목</option>
+            </select>
+            <select th:field="*{searchCondition.size}">
+                <option th:value="10">10개씩 보기</option>
+                <option th:value="5">5개씩 보기</option>
+                <option th:value="7">7개씩 보기</option>
+            </select>
+            <input th:field="*{searchCondition.keyWord}" placeholder="검색어를 입력하세요.">
+            <button th:type="submit" th:text="#{label.board.search}">검색</button>
+        </form>
+    </div>
+
     <div>
         <table class="table-bordered">
             <thead>
@@ -24,7 +41,12 @@
             <th><label th:text="#{label.board.updateDate}"></label></th>
             </thead>
             <tbody>
-            <tr th:each="boardList : ${boardAllListPaging}">
+            <tr th:if="${boardAllListPaging.totalPages} == 0">
+                <td colspan="4" th:align="center">
+                    <a>게시 글이 없습니다.</a>
+                </td>
+            </tr>
+            <tr th:if="${boardAllListPaging.totalPages} != 0" th:each="boardList : ${boardAllListPaging}">
                 <td>
                     <a th:text="${boardList.getBoardId()}"></a>
                 </td>
@@ -41,34 +63,26 @@
             </tbody>
         </table>
         <div>
-            <ul class="pagination"
-                th:with="
-                startNo=${(boardAllListPaging.number/boardAllListPaging.getSize())*boardAllListPaging.getSize() + 1},
-                endNo=(${startNo + 9 < boardAllListPaging.totalPages ? startNo+9 : boardAllListPaging.totalPages})
-                ">
+            <ul class="pagination" th:with="startNo=${(boardAllListPaging.number / 10) * 10 + 1},endNo=(${startNo + 9 < boardAllListPaging.totalPages ? startNo+9 : boardAllListPaging.totalPages})">
                 <li th:if="${!boardAllListPaging.first} ? hidden">
-                    <a th:href="@{listPaging(page=${boardAllListPaging.pageable.first().getPageNumber()+1})}">[처음]</a>
+                    <a th:href="@{listPaging(page=${boardAllListPaging.pageable.first().getPageNumber()+1}, type=${searchCondition.type}, keyWord=${searchCondition.keyWord}, size=${searchCondition.size})}">[처음]</a>
                 </li>
 
                 <li th:if="${boardAllListPaging.hasPrevious()} ? hidden">
-                    <a th:href="@{listPaging(page=${boardAllListPaging.number})}">[이전]</a>
+                    <a th:href="@{listPaging(page=${boardAllListPaging.number}, type=${searchCondition.type}, keyWord=${searchCondition.keyWord}, size=${searchCondition.size})}">[이전]</a>
                 </li>
 
-                <li th:each="pageNum : ${#numbers.sequence(startNo, endNo)}">
-                    <a th:href="@{listPaging(page=${pageNumStat.index+1})}" th:text="${pageNumStat.index+1}"></a>
+                <li th:if="${boardAllListPaging.totalPages} != 0"  th:each="pageNum : *{#numbers.sequence(startNo, endNo)}">
+                    <a th:href="@{listPaging(page=${pageNum}, type=${searchCondition.type}, keyWord=${searchCondition.keyWord}, size=${searchCondition.size})}" th:text="${pageNum}"></a>
                 </li>
 
                 <li th:if="${boardAllListPaging.hasNext()} ? hidden">
-                    <a th:href="@{listPaging(page=${boardAllListPaging.number+2})}">[다음]</a>
+                    <a th:href="@{listPaging(page=${boardAllListPaging.number+2}, type=${searchCondition.type}, keyWord=${searchCondition.keyWord}, size=${searchCondition.size})}">[다음]</a>
                 </li>
 
                 <li th:if="${!boardAllListPaging.last} ? hidden">
-                    <a th:href="@{listPaging(page=${boardAllListPaging.getTotalPages()})}">[마지막]</a>
+                    <a th:href="@{listPaging(page=${boardAllListPaging.getTotalPages()}, type=${searchCondition.type}, keyWord=${searchCondition.keyWord}, size=${searchCondition.size})}">[마지막]</a>
                 </li>
-            </ul>
-
-            <ul>
-
             </ul>
         </div>
         <div class="col">

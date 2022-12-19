@@ -2,6 +2,7 @@ package com.giantstep.board.domain.board.service;
 
 import com.giantstep.board.domain.board.dto.BoardListDto;
 import com.giantstep.board.domain.board.dto.BoardOneDetailDto;
+import com.giantstep.board.domain.board.dto.BoardSearchCondition;
 import com.giantstep.board.domain.board.entity.Board;
 import com.giantstep.board.domain.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,10 +29,17 @@ public class BoardService {
         return boardRepository.findAllByBoardListDto();
     }
 
-    public Page<BoardListDto> findAllBoardListPaging(Pageable pageable) {
+    public Page<BoardListDto> findAllBoardListPaging(Pageable pageable, BoardSearchCondition boardSearchCondition) {
         int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber()-1);
-        pageable = PageRequest.of(page, pageable.getPageSize());
-        return boardRepository.findAllByBoardListDtoAddPaging(pageable);
+
+        if (boardSearchCondition.getSize() == 0) {
+            pageable = PageRequest.of(page, pageable.getPageSize());
+        }
+        else {
+            pageable = PageRequest.of(page, boardSearchCondition.getSize());
+        }
+
+        return boardRepository.findAllByBoardListDtoAddPaging(pageable, boardSearchCondition);
     }
 
     public BoardOneDetailDto findByBoardId(Long boardId) {

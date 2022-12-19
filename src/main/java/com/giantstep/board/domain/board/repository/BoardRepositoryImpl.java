@@ -1,6 +1,7 @@
 package com.giantstep.board.domain.board.repository;
 
 import com.giantstep.board.domain.board.dto.*;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -10,6 +11,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static com.giantstep.board.domain.board.entity.QBoard.*;
+import static org.springframework.util.StringUtils.*;
 
 public class BoardRepositoryImpl implements BoardRepositoryCustom{
 
@@ -34,7 +36,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
     }
 
     @Override
-    public Page<BoardListDto> findAllByBoardListDtoAddPaging(Pageable pageable) {
+    public Page<BoardListDto> findAllByBoardListDtoAddPaging(Pageable pageable, BoardSearchCondition boardSearchCondition) {
 
         List<BoardListDto> boardListDtoPagingList = queryFactory
                 .select(new QBoardListDto(
@@ -44,7 +46,10 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                         board.updateDate
                 ))
                 .from(board)
-                .where(board.deletedYn.eq("N"))
+                .where(
+                        board.deletedYn.eq("N"),
+                        searchTypeCheck(boardSearchCondition)
+                )
                 .orderBy(board.updateDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -52,9 +57,31 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
 
         Long totalBoardListCount = queryFactory
                 .select(board.count())
-                .from(board).fetchOne();
+                .from(board)
+                .where(searchTypeCheck(boardSearchCondition))
+                .fetchOne();
 
         return new PageImpl<>(boardListDtoPagingList, pageable, totalBoardListCount);
+    }
+
+    private BooleanExpression searchTypeCheck(BoardSearchCondition boardSearchCondition) {
+        if ( "writer".equals(boardSearchCondition.getType()) ){
+            return writerContains(boardSearchCondition.getKeyWord());
+        }
+        else if ( "title".equals(boardSearchCondition.getType()) ){
+            return titleContains(boardSearchCondition.getKeyWord());
+        }
+        else {
+            return null;
+        }
+    }
+
+    private BooleanExpression writerContains(String keyWord) {
+        return hasText(keyWord) ? board.writer.contains(keyWord) : null;
+    }
+
+    private BooleanExpression titleContains(String keyWord) {
+        return hasText(keyWord) ? board.title.contains(keyWord) : null;
     }
 
     @Override
