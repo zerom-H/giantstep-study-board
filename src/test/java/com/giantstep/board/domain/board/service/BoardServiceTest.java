@@ -3,6 +3,7 @@ package com.giantstep.board.domain.board.service;
 import com.giantstep.board.domain.board.dto.*;
 import com.giantstep.board.domain.board.entity.Board;
 import com.giantstep.board.domain.board.repository.BoardRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -68,9 +69,10 @@ class BoardServiceTest {
         //give
         Pageable pageable = PageRequest.of(0, 10);
         int boardListCount = boardRepository.findAll().size();
+        BoardSearchCondition boardSearchCondition = new BoardSearchCondition();
 
         //when
-        Page<BoardListDto> boardListDtoAddPaging = boardRepository.findAllByBoardListDtoAddPaging(pageable);
+        Page<BoardListDto> boardListDtoAddPaging = boardRepository.findAllByBoardListDtoAddPaging(pageable, boardSearchCondition);
 
         //then
         assertEquals(boardListDtoAddPaging.getTotalElements(), boardListCount);
@@ -79,6 +81,39 @@ class BoardServiceTest {
         assertEquals(boardListDtoAddPaging.hasNext(), true);
         assertEquals(boardListDtoAddPaging.getNumber(), 0);
         assertEquals(boardListDtoAddPaging.getSize(), 10);
+
+    }
+
+    @BeforeEach
+    void 게시물_검색_준비() {
+        Board insert_search_board = Board.builder()
+                .writer("리정준")
+                .title("검색용 테스트 데이터")
+                .contents("검색용 테스트 데이터 입니다.")
+                .password("1234")
+                .deletedYn("N")
+                .build();
+
+        boardRepository.save(insert_search_board).getId();
+    }
+
+    @Test
+    void 게시물_검색() {
+
+        //give
+        Pageable pageable = PageRequest.of(0, 10);
+        BoardSearchCondition boardSearchCondition = new BoardSearchCondition();
+        boardSearchCondition.setWriter("리정준");
+        boardSearchCondition.setSize(5);
+
+        pageable = PageRequest.of(pageable.getPageNumber(), boardSearchCondition.getSize());
+
+        //when
+        Page<BoardListDto> boardListDtoAddPaging = boardRepository.findAllByBoardListDtoAddPaging(pageable, boardSearchCondition);
+
+        //then
+        assertEquals(boardListDtoAddPaging.getTotalElements(), 1);
+        assertEquals(boardListDtoAddPaging.getSize(), 5);
 
     }
 
