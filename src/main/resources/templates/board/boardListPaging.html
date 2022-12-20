@@ -16,9 +16,9 @@
 
 <script type="text/javascript" th:inline="javascript">
 
-    function selectSize(){
+    function searchDone(){
         const selectChoice = document.getElementById("selectKeyWord").value;
-        clear();
+        clearKeyWord();
 
         if (selectChoice == 'writer') {
             document.getElementById("writer").value = document.getElementById("keyWord").value;
@@ -34,9 +34,15 @@
         document.searchForm.submit();
     };
 
-    function clear(){
+    function clearKeyWord(){
         document.getElementById('writer').value=null;
         document.getElementById('title').value=null;
+    };
+
+    function resetButton(){
+        clearKeyWord();
+        document.getElementById('selectSize').value=10;
+        goSubmit();
     };
 </script>
 <body>
@@ -53,14 +59,17 @@
             <input hidden id="writer" th:field="*{searchCondition.writer}">
 
             <input id="keyWord" placeholder="검색어를 입력하세요." th:value="${searchCondition.title} + ${searchCondition.writer}">
-            <button onclick="selectSize()" th:text="#{label.board.search}">검색</button>
+            <button onclick="searchDone()" th:text="#{label.board.search}">검색</button>
+            <button onclick="resetButton()" th:text="#{label.board.clear}">초기화</button>
 
-            <select name="selectSize" th:field="*{searchCondition.size}" onchange="goSubmit()">
+            <select id="selectSize" th:field="*{searchCondition.size}" onchange="goSubmit()">
                 <option value="10" th:selected="${searchCondition.size} == '10'">10개씩 보기</option>
                 <option value="5" th:selected="${searchCondition.size} == '5'">5개씩 보기</option>
                 <option value="7" th:selected="${searchCondition.size} == '7'">7개씩 보기</option>
             </select>
         </form>
+
+
     </div>
 
     <div>
