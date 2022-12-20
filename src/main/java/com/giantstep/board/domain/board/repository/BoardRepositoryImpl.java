@@ -2,10 +2,11 @@ package com.giantstep.board.domain.board.repository;
 
 import com.giantstep.board.domain.board.dto.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -48,40 +49,31 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .from(board)
                 .where(
                         board.deletedYn.eq("N"),
-                        searchTypeCheck(boardSearchCondition)
+                        writerContains(boardSearchCondition.getWriter()),
+                        titleContains(boardSearchCondition.getTitle())
                 )
                 .orderBy(board.updateDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        Long totalBoardListCount = queryFactory
+        JPAQuery<Long> totalBoardListCount = queryFactory
                 .select(board.count())
                 .from(board)
-                .where(searchTypeCheck(boardSearchCondition))
-                .fetchOne();
+                .where(
+                        writerContains(boardSearchCondition.getWriter()),
+                        titleContains(boardSearchCondition.getTitle()))
+                ;
 
-        return new PageImpl<>(boardListDtoPagingList, pageable, totalBoardListCount);
+        return PageableExecutionUtils.getPage(boardListDtoPagingList, pageable, totalBoardListCount::fetchOne);
     }
 
-    private BooleanExpression searchTypeCheck(BoardSearchCondition boardSearchCondition) {
-        if ( "writer".equals(boardSearchCondition.getType()) ){
-            return writerContains(boardSearchCondition.getKeyWord());
-        }
-        else if ( "title".equals(boardSearchCondition.getType()) ){
-            return titleContains(boardSearchCondition.getKeyWord());
-        }
-        else {
-            return null;
-        }
+    private BooleanExpression writerContains(String writer) {
+        return hasText(writer) ? board.writer.contains(writer) : null;
     }
 
-    private BooleanExpression writerContains(String keyWord) {
-        return hasText(keyWord) ? board.writer.contains(keyWord) : null;
-    }
-
-    private BooleanExpression titleContains(String keyWord) {
-        return hasText(keyWord) ? board.title.contains(keyWord) : null;
+    private BooleanExpression titleContains(String title) {
+        return hasText(title) ? board.title.contains(title) : null;
     }
 
     @Override

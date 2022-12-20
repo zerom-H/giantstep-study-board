@@ -13,22 +13,53 @@
     </style>
     <title>boardList</title>
 </head>
+
+<script type="text/javascript" th:inline="javascript">
+
+    function selectSize(){
+        const selectChoice = document.getElementById("selectKeyWord").value;
+        clear();
+
+        if (selectChoice == 'writer') {
+            document.getElementById("writer").value = document.getElementById("keyWord").value;
+            goSubmit();
+        }
+        else if (selectChoice == 'title') {
+            document.getElementById("title").value = document.getElementById("keyWord").value;
+            goSubmit();
+        }
+    };
+
+    function goSubmit(){
+        document.searchForm.submit();
+    };
+
+    function clear(){
+        document.getElementById('writer').value=null;
+        document.getElementById('title').value=null;
+    };
+</script>
 <body>
 <div th:class="container">
 
     <div th:name="search_bar">
-        <form th:action th:method="GET">
-            <select th:field="*{searchCondition.type}">
-                <option th:value="writer">작성자</option>
-                <option th:value="title">제목</option>
+        <form th:action th:method="GET" name="searchForm">
+            <select id="selectKeyWord">
+                <option th:value="writer" th:selected="${not #strings.isEmpty(searchCondition.writer)}">작성자</option>
+                <option th:value="title" th:selected="${not #strings.isEmpty(searchCondition.title)}">제목</option>
             </select>
-            <select th:field="*{searchCondition.size}">
-                <option th:value="10">10개씩 보기</option>
-                <option th:value="5">5개씩 보기</option>
-                <option th:value="7">7개씩 보기</option>
+
+            <input hidden id="title" th:field="*{searchCondition.title}">
+            <input hidden id="writer" th:field="*{searchCondition.writer}">
+
+            <input id="keyWord" placeholder="검색어를 입력하세요." th:value="${searchCondition.title} + ${searchCondition.writer}">
+            <button onclick="selectSize()" th:text="#{label.board.search}">검색</button>
+
+            <select name="selectSize" th:field="*{searchCondition.size}" onchange="goSubmit()">
+                <option value="10" th:selected="${searchCondition.size} == '10'">10개씩 보기</option>
+                <option value="5" th:selected="${searchCondition.size} == '5'">5개씩 보기</option>
+                <option value="7" th:selected="${searchCondition.size} == '7'">7개씩 보기</option>
             </select>
-            <input th:field="*{searchCondition.keyWord}" placeholder="검색어를 입력하세요.">
-            <button th:type="submit" th:text="#{label.board.search}">검색</button>
         </form>
     </div>
 
@@ -65,23 +96,23 @@
         <div>
             <ul class="pagination" th:with="startNo=${(boardAllListPaging.number / 10) * 10 + 1},endNo=(${startNo + 9 < boardAllListPaging.totalPages ? startNo+9 : boardAllListPaging.totalPages})">
                 <li th:if="${!boardAllListPaging.first} ? hidden">
-                    <a th:href="@{listPaging(page=${boardAllListPaging.pageable.first().getPageNumber()+1}, type=${searchCondition.type}, keyWord=${searchCondition.keyWord}, size=${searchCondition.size})}">[처음]</a>
+                    <a th:href="@{listPaging(page=${boardAllListPaging.pageable.first().getPageNumber()+1}, writer=${searchCondition.writer}, title=${searchCondition.title}, size=${searchCondition.size})}">[처음]</a>
                 </li>
 
                 <li th:if="${boardAllListPaging.hasPrevious()} ? hidden">
-                    <a th:href="@{listPaging(page=${boardAllListPaging.number}, type=${searchCondition.type}, keyWord=${searchCondition.keyWord}, size=${searchCondition.size})}">[이전]</a>
+                    <a th:href="@{listPaging(page=${boardAllListPaging.number}, writer=${searchCondition.writer}, title=${searchCondition.title}, size=${searchCondition.size})}">[이전]</a>
                 </li>
 
                 <li th:if="${boardAllListPaging.totalPages} != 0"  th:each="pageNum : *{#numbers.sequence(startNo, endNo)}">
-                    <a th:href="@{listPaging(page=${pageNum}, type=${searchCondition.type}, keyWord=${searchCondition.keyWord}, size=${searchCondition.size})}" th:text="${pageNum}"></a>
+                    <a th:href="@{listPaging(page=${pageNum}, writer=${searchCondition.writer}, title=${searchCondition.title}, size=${searchCondition.size})}" th:text="${pageNum}"></a>
                 </li>
 
                 <li th:if="${boardAllListPaging.hasNext()} ? hidden">
-                    <a th:href="@{listPaging(page=${boardAllListPaging.number+2}, type=${searchCondition.type}, keyWord=${searchCondition.keyWord}, size=${searchCondition.size})}">[다음]</a>
+                    <a th:href="@{listPaging(page=${boardAllListPaging.number+2}, writer=${searchCondition.writer}, title=${searchCondition.title}, size=${searchCondition.size})}">[다음]</a>
                 </li>
 
                 <li th:if="${!boardAllListPaging.last} ? hidden">
-                    <a th:href="@{listPaging(page=${boardAllListPaging.getTotalPages()}, type=${searchCondition.type}, keyWord=${searchCondition.keyWord}, size=${searchCondition.size})}">[마지막]</a>
+                    <a th:href="@{listPaging(page=${boardAllListPaging.getTotalPages()}, writer=${searchCondition.writer}, title=${searchCondition.title}, size=${searchCondition.size})}">[마지막]</a>
                 </li>
             </ul>
         </div>
