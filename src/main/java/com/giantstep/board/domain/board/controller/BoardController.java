@@ -1,6 +1,6 @@
 package com.giantstep.board.domain.board.controller;
 
-import com.giantstep.board.domain.board.dto.*;
+import com.giantstep.board.domain.board.dto.board.*;
 import com.giantstep.board.domain.board.service.BoardService;
 import com.giantstep.board.utils.UtilsMethod;
 import lombok.RequiredArgsConstructor;

@@ -1,10 +1,10 @@
 package com.giantstep.board.domain.board.service;
 
-import com.giantstep.board.domain.board.dto.BoardListDto;
-import com.giantstep.board.domain.board.dto.BoardOneDetailDto;
-import com.giantstep.board.domain.board.dto.BoardSearchCondition;
+import com.giantstep.board.domain.board.dto.board.BoardListDto;
+import com.giantstep.board.domain.board.dto.board.BoardOneDetailDto;
+import com.giantstep.board.domain.board.dto.board.BoardSearchCondition;
 import com.giantstep.board.domain.board.entity.Board;
-import com.giantstep.board.domain.board.repository.BoardRepository;
+import com.giantstep.board.domain.board.repository.board.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
