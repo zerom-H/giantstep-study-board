@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import static com.giantstep.board.domain.board.entity.QBoard.*;
@@ -50,7 +52,8 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .where(
                         board.deletedYn.eq("N"),
                         writerContains(boardSearchCondition.getWriter()),
-                        titleContains(boardSearchCondition.getTitle())
+                        titleContains(boardSearchCondition.getTitle()),
+                        betweenDate(boardSearchCondition.getStartDate(), boardSearchCondition.getEndDate())
                 )
                 .orderBy(board.updateDate.desc())
                 .offset(pageable.getOffset())
@@ -62,7 +65,8 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .from(board)
                 .where(
                         writerContains(boardSearchCondition.getWriter()),
-                        titleContains(boardSearchCondition.getTitle()))
+                        titleContains(boardSearchCondition.getTitle()),
+                        betweenDate(boardSearchCondition.getStartDate(), boardSearchCondition.getEndDate()))
                 ;
 
         return PageableExecutionUtils.getPage(boardListDtoPagingList, pageable, totalBoardListCount::fetchOne);
@@ -75,6 +79,21 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
     private BooleanExpression titleContains(String title) {
         return hasText(title) ? board.title.contains(title) : null;
     }
+
+    private BooleanExpression betweenDate(LocalDate startDate, LocalDate endDate){
+
+        // 급한대로 최소한의 기간 검색의 유효성 검사 여기에 넣었습니다.
+        if (startDate == null || endDate == null) {
+            return null;
+        }
+        else {
+            // atStartOfDay() : 날짜 + 00:00:00.00000000을 의미
+            // .atTime(LocalTime.MAX) : 날짜 + 23:59:59.99999999를 의미
+            return board.updateDate.between(startDate.atStartOfDay(), endDate.atTime(LocalTime.MAX));
+        }
+    }
+
+
 
     @Override
     public BoardOneDetailDto findByBoardOneDetailDto(Long boardId) {
