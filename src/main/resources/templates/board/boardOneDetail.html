@@ -8,6 +8,11 @@
         .container {
             max-width: 560px;
         }
+        ul li{
+            list-style-type: none;
+            display: inline-block;
+            margin-right: 10px;
+        }
     </style>
     <title>boardOneDetail</title>
 </head>
@@ -22,31 +27,31 @@
     <div>
         <label for="boardId" th:text="#{label.board.id}"> 글 번호</label>
         <input type="text" id="boardId" name="boardId" class="form-control"
-               th:value="${boardOneDetail.boardId}" readonly>
+               th:value="${boardOneDetail.boardOneDetailDto.boardId}" readonly>
     </div>
 
     <div>
         <label for="boardTitle" th:text="#{label.board.title}">글 제목</label>
         <input type="text" id="boardTitle" name="boardTitle" class="form-control"
-               th:value="${boardOneDetail.boardTitle}" readonly>
+               th:value="${boardOneDetail.boardOneDetailDto.boardTitle}" readonly>
     </div>
 
     <div>
         <label for="boardWriter" th:text="#{label.board.writer}">작성자</label>
         <input type="text" id="boardWriter" name="boardWriter" class="form-control"
-               th:value="${boardOneDetail.boardWriter}" readonly>
+               th:value="${boardOneDetail.boardOneDetailDto.boardWriter}" readonly>
     </div>
 
     <div>
         <label for="boardContents" th:text="#{label.board.contents}">글 내용</label>
         <textarea type="text" id="boardContents" class="form-control"
-                  th:field="${boardOneDetail.boardContents}" readonly></textarea>
+                  th:field="${boardOneDetail.boardOneDetailDto.boardContents}" readonly></textarea>
     </div>
 
     <div>
         <label for="boardUpdateDate" th:text="#{label.board.updateDate}">글 수정일</label>
         <input type="text" id="boardUpdateDate" name="boardUpdateDate" class="form-control"
-               th:value="${boardOneDetail.boardUpdateDate}" readonly>
+               th:value="${boardOneDetail.boardOneDetailDto.boardUpdateDate}" readonly>
     </div>
 
     <hr class="my-4">
@@ -67,6 +72,43 @@
         <div class="col">
             <button class="w-100 btn btn-secondary btn-lg" th:onclick="|location.href='@{/giantstep-study/board/listPaging}'|"
                     type="button" th:text="#{label.board.button.list}">목록으로</button>
+        </div>
+    </div>
+
+    <div>
+        <div th:each="boardCommentList : ${boardOneDetail.boardCommentListDtos}">
+            <a th:text="${boardCommentList.boardCommentWriter}"></a>
+            <a th:text="${boardCommentList.boardCommentUpdateDate}"></a>
+            <button > 수정</button>
+            <button > 삭제</button>
+            <br>
+            <a th:text="${boardCommentList.boardCommentContents}"></a>
+            <hr>
+        </div>
+
+        <div>
+            <ul class="pagination" th:with="startNo=${(boardOneDetail.boardCommentListDtos.number / 10) * 10 + 1},
+            endNo=(${startNo + 9 < boardOneDetail.boardCommentListDtos.totalPages ? startNo+9 : boardOneDetail.boardCommentListDtos.totalPages})">
+                <li th:if="${!boardOneDetail.boardCommentListDtos.first} ? hidden">
+                    <a th:href="@{detail(page=${boardOneDetail.boardCommentListDtos.pageable.first().getPageNumber()+1})}">[처음]</a>
+                </li>
+
+                <li th:if="${boardOneDetail.boardCommentListDtos.hasPrevious()} ? hidden">
+                    <a th:href="@{detail(page=${boardOneDetail.boardCommentListDtos.number})}">[이전]</a>
+                </li>
+
+                <li th:if="${boardOneDetail.boardCommentListDtos.totalPages} != 0"  th:each="pageNum : *{#numbers.sequence(startNo, endNo)}">
+                    <a th:href="@{detail(page=${pageNum})}" th:text="${pageNum}"></a>
+                </li>
+
+                <li th:if="${boardOneDetail.boardCommentListDtos.hasNext()} ? hidden">
+                    <a th:href="@{detail(page=${boardOneDetail.boardCommentListDtos.number+2})}">[다음]</a>
+                </li>
+
+                <li th:if="${!boardOneDetail.boardCommentListDtos.last} ? hidden">
+                    <a th:href="@{detail(page=${boardOneDetail.boardCommentListDtos.getTotalPages()})}">[마지막]</a>
+                </li>
+            </ul>
         </div>
     </div>
 

@@ -2,9 +2,12 @@ package com.giantstep.board.domain.board.service;
 
 import com.giantstep.board.domain.board.dto.board.BoardListDto;
 import com.giantstep.board.domain.board.dto.board.BoardOneDetailDto;
+import com.giantstep.board.domain.board.dto.board.BoardOneDetailResponse;
 import com.giantstep.board.domain.board.dto.board.BoardSearchCondition;
+import com.giantstep.board.domain.board.dto.comment.BoardCommentListDto;
 import com.giantstep.board.domain.board.entity.Board;
 import com.giantstep.board.domain.board.repository.board.BoardRepository;
+import com.giantstep.board.domain.board.repository.comment.BoardCommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +22,7 @@ import java.util.List;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final BoardCommentRepository boardCommentRepository;
 
     @Transactional
     public Long saveBoard(Board board) {
@@ -44,6 +48,17 @@ public class BoardService {
 
     public BoardOneDetailDto findByBoardId(Long boardId) {
         return boardRepository.findByBoardOneDetailDto(boardId);
+    }
+    public BoardOneDetailResponse findByBoardIdAndComment(Long boardId, Pageable pageable) {
+
+        int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber()-1);
+        pageable = PageRequest.of(page, pageable.getPageSize());
+
+        BoardOneDetailDto byBoardOneDetailDto = boardRepository.findByBoardOneDetailDto(boardId);
+
+        Page<BoardCommentListDto> byBoardCommentListDtoAddPaging = boardCommentRepository.findAllByBoardCommentListDtoAddPaging(pageable, boardId);
+
+        return new BoardOneDetailResponse(byBoardOneDetailDto, byBoardCommentListDtoAddPaging);
     }
 
     @Transactional
