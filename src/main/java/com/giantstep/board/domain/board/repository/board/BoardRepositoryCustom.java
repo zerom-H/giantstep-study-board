@@ -1,8 +1,8 @@
-package com.giantstep.board.domain.board.repository;
+package com.giantstep.board.domain.board.repository.board;
 
-import com.giantstep.board.domain.board.dto.BoardListDto;
-import com.giantstep.board.domain.board.dto.BoardOneDetailDto;
-import com.giantstep.board.domain.board.dto.BoardSearchCondition;
+import com.giantstep.board.domain.board.dto.board.BoardListDto;
+import com.giantstep.board.domain.board.dto.board.BoardOneDetailDto;
+import com.giantstep.board.domain.board.dto.board.BoardSearchCondition;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

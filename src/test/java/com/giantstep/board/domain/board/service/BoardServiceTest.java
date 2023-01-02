@@ -1,8 +1,8 @@
 package com.giantstep.board.domain.board.service;
 
-import com.giantstep.board.domain.board.dto.*;
+import com.giantstep.board.domain.board.dto.board.*;
 import com.giantstep.board.domain.board.entity.Board;
-import com.giantstep.board.domain.board.repository.BoardRepository;
+import com.giantstep.board.domain.board.repository.board.BoardRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,7 @@
 package com.giantstep.board.domain.board.controller;
 
-import com.giantstep.board.domain.board.dto.*;
+import com.giantstep.board.domain.board.dto.board.*;
+import com.giantstep.board.domain.board.dto.comment.BoardCommentAddFormDto;
 import com.giantstep.board.domain.board.service.BoardService;
 import com.giantstep.board.utils.UtilsMethod;
 import lombok.RequiredArgsConstructor;
@@ -61,9 +62,10 @@ public class BoardController extends UtilsMethod {
 
     /** 게시 물 단건 상세조회 */
     @GetMapping("{boardId}/detail")
-    public String boardOneDetailView(@PathVariable("boardId") Long boardId,
+    public String boardOneDetailView(@PathVariable("boardId") Long boardId, @PageableDefault(size = 5) Pageable pageable,
+                                     @ModelAttribute("boardComment") BoardCommentAddFormDto boardCommentAddFormDto,
                                      Model model) {
-        model.addAttribute("boardOneDetail", boardService.findByBoardId(boardId));
+        model.addAttribute("boardOneDetail", boardService.findByBoardIdAndComment(boardId, pageable));
         return "board/boardOneDetail";
     }
 

@@ -1,4 +1,4 @@
-package com.giantstep.board.domain.board.dto;
+package com.giantstep.board.domain.board.dto.board;
 
 import com.giantstep.board.domain.board.entity.Board;
 import lombok.Data;
