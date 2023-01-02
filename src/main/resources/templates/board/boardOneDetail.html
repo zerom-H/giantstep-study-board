@@ -74,7 +74,7 @@
         </div>
     </div>
 
-    <div>
+    <div th:name="comment">
         <div th:each="boardCommentList : ${boardOneDetail.boardCommentListDtos}">
             <a th:text="${boardCommentList.boardCommentWriter}"></a>
             <a th:text="${boardCommentList.boardCommentUpdateDate}"></a>
@@ -109,7 +109,57 @@
                 </li>
             </ul>
         </div>
+
+        <hr>
+
+        <div th:name="commentAddForm">
+            <form id="commentAddForm" th:object="${boardComment}">
+
+                <input id="boardCommentWriter" th:type="text" th:field="*{boardCommentWriter}" placeholder="이름">
+
+                <input id="boardCommentPassword" type="text" th:field="*{boardCommentPassword}" placeholder="비밀번호 입력하세요">
+
+                <br>
+
+                <textarea id="boardCommentContents" type="text" th:field="*{boardCommentContents}"  placeholder="내용을 입력하세요."></textarea>
+
+                <button onclick="commentAddDone()">댓글 작성하기</button>
+            </form>
+        </div>
     </div>
+
+    <script type="text/javascript">
+        function commentAddDone() {
+            const data = {
+                boardCommentWriter: document.getElementById('boardCommentWriter').value,
+                boardCommentPassword: document.getElementById('boardCommentPassword').value,
+                boardCommentContents: document.getElementById('boardCommentContents').value
+            }
+            const regExp = /^[0-9]{4}/;
+            // 댓글 유효성 검사
+            if (!data.boardCommentWriter || data.boardCommentWriter.trim() === "") {
+                alert("작성자는 공백일 수 없습니다!");
+                return false;
+            }
+            else if (!data.boardCommentPassword || data.boardCommentPassword.trim() === "") {
+                alert("비밀번호는 공백일 수 없습니다!");
+                return false;
+            }
+            else if (!regExp.test(data.boardCommentPassword)){
+                alert("비밀번호 형식은 숫자 4자리 입니다. ");
+                return false;
+            }
+            else if (!data.boardCommentContents || data.boardCommentContents.trim() === "") {
+                alert("내용은 공백일 수 없습니다!");
+                return false;
+            }
+
+            document.getElementById('commentAddForm').method = 'POST';
+            document.getElementById('commentAddForm').action = 'commentAdd';
+            document.getElementById('commentAddForm').submit();
+        };
+
+    </script>
 
 </div>
 

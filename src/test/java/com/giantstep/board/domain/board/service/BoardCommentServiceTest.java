@@ -58,4 +58,26 @@ class BoardCommentServiceTest {
 
     }
 
+    @Test
+    void 댓글_저장() {
+
+        //give
+        long boardId = 177;
+        Board findBoard = boardRepository.findById(boardId).get();
+
+        BoardComment boardComment = BoardComment.createBoardComment()
+                .boardCommentWriter("테스터정준")
+                .boardCommentContents("댓글 테스트 데이터 입니다.")
+                .boardCommentPassword("1234")
+                .board(findBoard)
+                .build();
+
+        //when
+        BoardComment saveBoardComment = boardCommentRepository.save(boardComment);
+
+        //then
+        assertEquals(saveBoardComment.getWriter(), boardComment.getWriter());
+        assertEquals(saveBoardComment.getContents(), boardComment.getContents());
+    }
+
 }
