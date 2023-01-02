@@ -2,6 +2,7 @@ package com.giantstep.board.domain.board.entity;
 
 import com.giantstep.board.global.audit.BaseTimeEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,5 +29,15 @@ public class BoardComment extends BaseTimeEntity {
     /** 댓글의 게시 물 번호 */
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Board board;
+
+    @Builder(builderClassName = "createBoardComment", builderMethodName = "createBoardComment")
+    public BoardComment(Long boardCommentId, String boardCommentWriter,
+                        String boardCommentContents, String boardCommentPassword, Board board){
+        this.id = boardCommentId;
+        this.writer = boardCommentWriter;
+        this.contents = boardCommentContents;
+        this.password = boardCommentPassword;
+        this.board = board;
+    }
 
 }

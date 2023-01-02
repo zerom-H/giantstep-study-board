@@ -1,6 +1,6 @@
-package com.giantstep.board.domain.board.repository;
+package com.giantstep.board.domain.board.repository.board;
 
-import com.giantstep.board.domain.board.dto.*;
+import com.giantstep.board.domain.board.dto.board.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
