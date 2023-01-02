@@ -50,6 +50,12 @@
 
     <div th:name="search_bar">
         <form th:action th:method="GET" name="searchForm">
+
+            <input type="date" th:field="*{searchCondition.startDate}">
+            <input type="date" th:field="*{searchCondition.endDate}">
+
+            <br>
+
             <select id="selectKeyWord">
                 <option th:value="writer" th:selected="${not #strings.isEmpty(searchCondition.writer)}">작성자</option>
                 <option th:value="title" th:selected="${not #strings.isEmpty(searchCondition.title)}">제목</option>
@@ -105,23 +111,23 @@
         <div>
             <ul class="pagination" th:with="startNo=${(boardAllListPaging.number / 10) * 10 + 1},endNo=(${startNo + 9 < boardAllListPaging.totalPages ? startNo+9 : boardAllListPaging.totalPages})">
                 <li th:if="${!boardAllListPaging.first} ? hidden">
-                    <a th:href="@{listPaging(page=${boardAllListPaging.pageable.first().getPageNumber()+1}, writer=${searchCondition.writer}, title=${searchCondition.title}, size=${searchCondition.size})}">[처음]</a>
+                    <a th:href="@{listPaging(page=${boardAllListPaging.pageable.first().getPageNumber()+1}, startDate=${searchCondition.startDate}, endDate=${searchCondition.endDate}, writer=${searchCondition.writer}, title=${searchCondition.title}, size=${searchCondition.size})}">[처음]</a>
                 </li>
 
                 <li th:if="${boardAllListPaging.hasPrevious()} ? hidden">
-                    <a th:href="@{listPaging(page=${boardAllListPaging.number}, writer=${searchCondition.writer}, title=${searchCondition.title}, size=${searchCondition.size})}">[이전]</a>
+                    <a th:href="@{listPaging(page=${boardAllListPaging.number}, startDate=${searchCondition.startDate}, endDate=${searchCondition.endDate}, writer=${searchCondition.writer}, title=${searchCondition.title}, size=${searchCondition.size})}">[이전]</a>
                 </li>
 
                 <li th:if="${boardAllListPaging.totalPages} != 0"  th:each="pageNum : *{#numbers.sequence(startNo, endNo)}">
-                    <a th:href="@{listPaging(page=${pageNum}, writer=${searchCondition.writer}, title=${searchCondition.title}, size=${searchCondition.size})}" th:text="${pageNum}"></a>
+                    <a th:href="@{listPaging(page=${pageNum}, startDate=${searchCondition.startDate}, endDate=${searchCondition.endDate}, writer=${searchCondition.writer}, title=${searchCondition.title}, size=${searchCondition.size})}" th:text="${pageNum}"></a>
                 </li>
 
                 <li th:if="${boardAllListPaging.hasNext()} ? hidden">
-                    <a th:href="@{listPaging(page=${boardAllListPaging.number+2}, writer=${searchCondition.writer}, title=${searchCondition.title}, size=${searchCondition.size})}">[다음]</a>
+                    <a th:href="@{listPaging(page=${boardAllListPaging.number+2}, startDate=${searchCondition.startDate}, endDate=${searchCondition.endDate}, writer=${searchCondition.writer}, title=${searchCondition.title}, size=${searchCondition.size})}">[다음]</a>
                 </li>
 
                 <li th:if="${!boardAllListPaging.last} ? hidden">
-                    <a th:href="@{listPaging(page=${boardAllListPaging.getTotalPages()}, writer=${searchCondition.writer}, title=${searchCondition.title}, size=${searchCondition.size})}">[마지막]</a>
+                    <a th:href="@{listPaging(page=${boardAllListPaging.getTotalPages()}, writer=${searchCondition.writer}, startDate=${searchCondition.startDate}, endDate=${searchCondition.endDate}, title=${searchCondition.title}, size=${searchCondition.size})}">[마지막]</a>
                 </li>
             </ul>
         </div>
