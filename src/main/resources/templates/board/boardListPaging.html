@@ -14,45 +14,14 @@
     <title>boardList</title>
 </head>
 
-<script type="text/javascript" th:inline="javascript">
-
-    function searchDone(){
-        const selectChoice = document.getElementById("selectKeyWord").value;
-        clearKeyWord();
-
-        if (selectChoice == 'writer') {
-            document.getElementById("writer").value = document.getElementById("keyWord").value;
-            goSubmit();
-        }
-        else if (selectChoice == 'title') {
-            document.getElementById("title").value = document.getElementById("keyWord").value;
-            goSubmit();
-        }
-    };
-
-    function goSubmit(){
-        document.searchForm.submit();
-    };
-
-    function clearKeyWord(){
-        document.getElementById('writer').value=null;
-        document.getElementById('title').value=null;
-    };
-
-    function resetButton(){
-        clearKeyWord();
-        document.getElementById('selectSize').value=10;
-        goSubmit();
-    };
-</script>
 <body>
 <div th:class="container">
 
     <div th:name="search_bar">
         <form th:action th:method="GET" name="searchForm">
 
-            <input type="date" th:field="*{searchCondition.startDate}">
-            <input type="date" th:field="*{searchCondition.endDate}">
+            <input type="date" id="startDate" th:field="*{searchCondition.startDate}">
+            <input type="date" id="endDate" th:field="*{searchCondition.endDate}">
 
             <br>
 
@@ -141,4 +110,54 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+
+    // 날짜 변수 세팅.
+    const today = new Date();
+    const defaultStartDate = new Date(today.getFullYear() ,today.getMonth()-3, today.getDate()).toISOString().slice(0,10);
+    const defaultEndDate = today.toISOString().slice(0, 10);
+    let startDate = document.getElementById('startDate');
+    let endDate = document.getElementById('endDate');
+
+    window.onload = function() {
+        // 페이지 최초 로드 시 검색부분의 시작, 종료날짜 기본값 설정.
+        if (startDate.value.trim() === "" && endDate.value.trim() === ""){
+            startDate.value = defaultStartDate;
+            endDate.value = defaultEndDate;
+        }
+
+    }
+
+    function searchDone(){
+        const selectChoice = document.getElementById("selectKeyWord").value;
+        clearKeyWord();
+
+        if (selectChoice == 'writer') {
+            document.getElementById("writer").value = document.getElementById("keyWord").value;
+            goSubmit();
+        }
+        else if (selectChoice == 'title') {
+            document.getElementById("title").value = document.getElementById("keyWord").value;
+            goSubmit();
+        }
+    };
+
+    function goSubmit(){
+        document.searchForm.submit();
+    };
+
+    function clearKeyWord(){
+        document.getElementById('writer').value=null;
+        document.getElementById('title').value=null;
+    };
+
+    function resetButton(){
+        clearKeyWord();
+        document.getElementById('selectSize').value=10;
+        startDate.value = defaultStartDate;
+        endDate.value = defaultEndDate;
+        goSubmit();
+    };
+</script>
 </body>
