@@ -80,4 +80,20 @@ class BoardCommentServiceTest {
         assertEquals(saveBoardComment.getContents(), boardComment.getContents());
     }
 
+    @Test
+    void 댓글_수정() {
+
+        //give
+        long updateBoardCommentId = 13;
+        BoardComment updateBoardComment = BoardComment.createBoardComment()
+                .boardCommentContents("수정된 댓글")
+                .build();
+
+        //when
+        BoardComment updateDoneBoardComment = boardCommentRepository.findById(updateBoardCommentId).get().updateBoardComment(updateBoardComment);
+
+        //then
+        assertEquals(updateDoneBoardComment.getContents(), updateBoardComment.getContents());
+    }
+
 }

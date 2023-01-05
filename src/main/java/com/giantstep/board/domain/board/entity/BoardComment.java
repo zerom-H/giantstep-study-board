@@ -40,4 +40,9 @@ public class BoardComment extends BaseTimeEntity {
         this.board = board;
     }
 
+    public BoardComment updateBoardComment(BoardComment updateBoardComment) {
+        this.contents = updateBoardComment.getContents();
+        return updateBoardComment;
+    }
+
 }
