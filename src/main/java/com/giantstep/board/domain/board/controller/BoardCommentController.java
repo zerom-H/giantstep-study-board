@@ -35,4 +35,10 @@ public class BoardCommentController extends UtilsMethod {
         boardCommentService.updateBoardComment(boardCommentId, boardCommentUpdateFormDto.toEntity());
         return "redirect:detail";
     }
+
+    @PostMapping("{boardId}/{boardCommentId}")
+    public String commentDeleteDone(@PathVariable("boardId") Long boardId, @PathVariable("boardCommentId") Long boardCommentId) {
+        boardCommentService.deleteBoardComment(boardCommentId);
+        return "redirect:detail";
+    }
 }

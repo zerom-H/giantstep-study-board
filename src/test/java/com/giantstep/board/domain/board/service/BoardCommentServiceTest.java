@@ -37,6 +37,7 @@ class BoardCommentServiceTest {
                 .boardCommentContents("댓글 테스트 데이터 입니다.")
                 .boardCommentPassword("1234")
                 .board(findBoard)
+                .deletedYn("N")
                 .build();
 
         boardCommentRepository.save(boardComment);
@@ -70,6 +71,7 @@ class BoardCommentServiceTest {
                 .boardCommentContents("댓글 테스트 데이터 입니다.")
                 .boardCommentPassword("1234")
                 .board(findBoard)
+                .deletedYn("N")
                 .build();
 
         //when
@@ -94,6 +96,29 @@ class BoardCommentServiceTest {
 
         //then
         assertEquals(updateDoneBoardComment.getContents(), updateBoardComment.getContents());
+    }
+
+    @Test
+    void 댓글_삭제() {
+
+        //give
+        long boardId = 177;
+        Board findBoard = boardRepository.findById(boardId).get();
+        BoardComment defaultBoardComment = BoardComment.createBoardComment()
+                .boardCommentWriter("이정준")
+                .boardCommentContents("댓글 테스트 데이터 입니다.")
+                .boardCommentPassword("1234")
+                .board(findBoard)
+                .deletedYn("N")
+                .build();
+
+        BoardComment saveDefaultBoardComment = boardCommentRepository.save(defaultBoardComment);
+
+        //when
+        boardCommentRepository.findById(saveDefaultBoardComment.getId()).get().deleteBoardComment();
+
+        //then
+        assertEquals(saveDefaultBoardComment.getDeletedYn(), "Y");
     }
 
 }

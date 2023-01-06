@@ -31,4 +31,9 @@ public class BoardCommentService {
     public Long updateBoardComment(Long boardCommentId, BoardComment updateBoardComment) {
         return boardCommentRepository.findById(boardCommentId).get().updateBoardComment(updateBoardComment).getId();
     }
+
+    @Transactional
+    public void deleteBoardComment(Long boardCommentId) {
+        boardCommentRepository.findById(boardCommentId).get().deleteBoardComment();
+    }
 }

@@ -20,6 +20,7 @@ public class BoardCommentAddFormDto {
                 .boardCommentContents(addBoardCommentContents)
                 .boardCommentPassword(addBoardCommentPassword)
                 .board(board)
+                .deletedYn("N")
                 .build();
         return boardComment;
     }

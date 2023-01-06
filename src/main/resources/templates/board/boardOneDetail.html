@@ -84,7 +84,34 @@
                 <input hidden th:value="${boardCommentList.boardCommentPassword}" id="boardCommentPassword" >
 
                 <button type="button" data-bs-toggle="collapse" th:attr="data-bs-target=|#c${boardCommentList.boardCommentId}" > 수정</button>
-                <button > 삭제</button>
+                <!-- Button trigger modal -->
+                <button type="button" data-bs-toggle="modal" th:attr="data-bs-target=|#c${boardCommentList.boardCommentId}">
+                    삭제
+                </button>
+
+                <!-- 댓글 삭제 Modal 시작 -->
+                <div class="modal fade" th:id="c + ${boardCommentList.boardCommentId}" tabindex="-1" role="dialog" aria-labelledby="modalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalCenterTitle">삭제할 댓글 비밀번호를 정확히 입력하세요.</h5>
+                            </div>
+                            <div class="modal-body">
+                                <form id="commentDeleteCheckForm">
+                                    <input th:value="${boardCommentList.boardCommentPassword}">
+                                    <input id="deleteBoardCommentId" th:value="${boardCommentList.boardCommentId}">
+                                    <input id="deleteBoardCommentPassword">
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary waves-effect wave-light" data-dismiss="modal" >취소하기</button>
+                                <button type="button" onclick="commentDeleteDone()" class="btn btn-danger waves-effect wave-light">삭제하기</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 댓글 삭제 Modal 끝 -->
+
                 <br>
                 <a class="collapse show" th:id="c + ${boardCommentList.boardCommentId}" th:text="${boardCommentList.boardCommentContents}"></a>
                 <br>
@@ -146,27 +173,30 @@
     </div>
 
     <script type="text/javascript">
+
+        const boardCommentPassword = document.getElementById('boardCommentPassword').value;
+
         function commentAddDone() {
             const data = {
-                boardCommentWriter: document.getElementById('addBoardCommentWriter').value,
-                boardCommentPassword: document.getElementById('addBoardCommentPassword').value,
-                boardCommentContents: document.getElementById('addBoardCommentContents').value
+                addBoardCommentWriter: document.getElementById('addBoardCommentWriter').value,
+                addBoardCommentPassword: document.getElementById('addBoardCommentPassword').value,
+                addBoardCommentContents: document.getElementById('addBoardCommentContents').value
             }
             const regExp = /^[0-9]{4}/;
             // 댓글 유효성 검사
-            if (!data.boardCommentWriter || data.boardCommentWriter.trim() === "") {
+            if (!data.addBoardCommentWriter || data.addBoardCommentWriter.trim() === "") {
                 alert("작성자는 공백일 수 없습니다!");
                 return false;
             }
-            else if (!data.boardCommentPassword || data.boardCommentPassword.trim() === "") {
+            else if (!data.addBoardCommentPassword || data.addBoardCommentPassword.trim() === "") {
                 alert("비밀번호는 공백일 수 없습니다!");
                 return false;
             }
-            else if (!regExp.test(data.boardCommentPassword)){
+            else if (!regExp.test(data.addBoardCommentPassword)){
                 alert("비밀번호 형식은 숫자 4자리 입니다. ");
                 return false;
             }
-            else if (!data.boardCommentContents || data.boardCommentContents.trim() === "") {
+            else if (!data.addBoardCommentContents || data.addBoardCommentContents.trim() === "") {
                 alert("내용은 공백일 수 없습니다!");
                 return false;
             }
@@ -179,15 +209,18 @@
         function commentUpdateDone() {
             const data = {
                 updateBoardCommentContents: document.getElementById('updateBoardCommentContents').value,
-                updateBoardCommentPassword: document.getElementById('updateBoardCommentPassword').value,
-                boardCommentPassword: document.getElementById('boardCommentPassword').value
+                updateBoardCommentPassword: document.getElementById('updateBoardCommentPassword').value
             }
             //댓글 수정 폼 유효성 검사
             if (data.updateBoardCommentContents == null || data.updateBoardCommentContents.trim()===''){
                 alert("수정할 댓글 내용은 공백일 수 없습니다!");
                 return false;
             }
-            else if (!(data.updateBoardCommentPassword === data.boardCommentPassword) ){
+            else if (data.updateBoardCommentPassword.trim()===''){
+                alert("비밀번호는 공백일 수 없습니다!");
+                return false;
+            }
+            else if (!(data.updateBoardCommentPassword === boardCommentPassword) ){
                 alert("비밀번호가 일치하지 않습니다. 다시 확인하세요!");
                 return false;
             }
@@ -197,6 +230,24 @@
             document.getElementById('updateBoardCommentForm').action = boardCommentId;
             document.getElementById('updateBoardCommentForm').submit();
         };
+
+        function commentDeleteDone() {
+            const deleteBoardCommentPassword = document.getElementById('deleteBoardCommentPassword').value;
+
+            //댓글 삭제 비밀번호 유효성 검사
+            if (deleteBoardCommentPassword.trim()===''){
+                alert("비밀번호가 공백일 수 없습니다!");
+                return false;
+            }
+            if ( !(deleteBoardCommentPassword === boardCommentPassword) ){
+                alert("비밀번호가 틀립니다. 다시 확인하세요!");
+                return false;
+            }
+            const deleteBoardCommentId = document.getElementById('deleteBoardCommentId').value;
+            document.getElementById('commentDeleteCheckForm').method = 'POST';
+            document.getElementById('commentDeleteCheckForm').action = deleteBoardCommentId;
+            document.getElementById('commentDeleteCheckForm').submit();
+        }
 
     </script>
 
