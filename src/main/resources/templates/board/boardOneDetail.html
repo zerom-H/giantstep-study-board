@@ -83,11 +83,11 @@
                 <a th:text="${boardCommentList.boardCommentUpdateDate}"></a>
                 <input hidden th:value="${boardCommentList.boardCommentPassword}" id="boardCommentPassword" >
 
-                <button type="button" data-bs-toggle="collapse" th:attr="data-bs-target=|#c${boardCommentList.boardCommentId}" > 수정</button>
+                <button type="button" data-bs-toggle="collapse"
+                        th:attr="data-bs-target=|#c${boardCommentList.boardCommentId}"> 수정</button>
                 <!-- Button trigger modal -->
-                <button type="button" data-bs-toggle="modal" th:attr="data-bs-target=|#c${boardCommentList.boardCommentId}">
-                    삭제
-                </button>
+                <button type="button" data-bs-toggle="modal"
+                        th:attr="data-bs-target=|#c${boardCommentList.boardCommentId}"> 삭제 </button>
 
                 <!-- 댓글 삭제 Modal 시작 -->
                 <div class="modal fade" th:id="c + ${boardCommentList.boardCommentId}" tabindex="-1" role="dialog" aria-labelledby="modalCenterTitle" aria-hidden="true">
@@ -120,7 +120,7 @@
             <div name="boardCommentUpdateForm" class="collapse" th:id="c + ${boardCommentList.boardCommentId}">
                 <form id="updateBoardCommentForm" th:object="${boardCommentUpdateForm}" >
 
-                    <input hidden th:value="${boardCommentList.boardCommentId}" id="updateBoardCommentID">
+                    <input hidden th:value="${boardCommentList.boardCommentId}" name="updateBoardCommentID">
                     <input name="boardCommentContents" th:value="${boardCommentList.boardCommentContents}" id="updateBoardCommentContents" >
                     <input th:field="*{boardCommentPassword}" id="updateBoardCommentPassword" placeholder="비밀번호 입력하세요" >
                     <button onclick="commentUpdateDone()">완료</button>
@@ -225,9 +225,8 @@
                 return false;
             }
 
-            let boardCommentId = document.getElementById('updateBoardCommentID').value;
             document.getElementById('updateBoardCommentForm').method = 'POST';
-            document.getElementById('updateBoardCommentForm').action = boardCommentId;
+            document.getElementById('updateBoardCommentForm').action = 'updateBoardComment';
             document.getElementById('updateBoardCommentForm').submit();
         };
 

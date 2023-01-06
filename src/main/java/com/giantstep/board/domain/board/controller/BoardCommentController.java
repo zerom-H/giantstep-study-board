@@ -28,11 +28,10 @@ public class BoardCommentController extends UtilsMethod {
         return showMessageAndRedirectUri("댓글이 성공적으로 등록되었습니다.", "detail", model);
     }
 
-    @PostMapping("{boardId}/{boardCommentId}")
-    public String commentUpdateDone(@PathVariable("boardId") Long boardId, @PathVariable("boardCommentId") Long boardCommentId,
+    @PostMapping("{boardId}/updateBoardComment")
+    public String commentUpdateDone(@PathVariable("boardId") Long boardId,
                                     @ModelAttribute("boardCommentUpdateForm")BoardCommentUpdateFormDto boardCommentUpdateFormDto) {
-        System.out.println("boardCom= "+boardCommentUpdateFormDto.getBoardCommentContents());
-        boardCommentService.updateBoardComment(boardCommentId, boardCommentUpdateFormDto.toEntity());
+        boardCommentService.updateBoardComment(boardCommentUpdateFormDto.toEntity());
         return "redirect:detail";
     }
 

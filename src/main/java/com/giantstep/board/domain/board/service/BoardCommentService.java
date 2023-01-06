@@ -28,8 +28,8 @@ public class BoardCommentService {
     }
 
     @Transactional
-    public Long updateBoardComment(Long boardCommentId, BoardComment updateBoardComment) {
-        return boardCommentRepository.findById(boardCommentId).get().updateBoardComment(updateBoardComment).getId();
+    public Long updateBoardComment(BoardComment updateBoardComment) {
+        return boardCommentRepository.findById(updateBoardComment.getId()).get().updateBoardComment(updateBoardComment).getId();
     }
 
     @Transactional

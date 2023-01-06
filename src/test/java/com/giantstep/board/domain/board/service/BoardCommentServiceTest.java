@@ -86,13 +86,13 @@ class BoardCommentServiceTest {
     void 댓글_수정() {
 
         //give
-        long updateBoardCommentId = 13;
         BoardComment updateBoardComment = BoardComment.createBoardComment()
+                .boardCommentId(13L)
                 .boardCommentContents("수정된 댓글")
                 .build();
 
         //when
-        BoardComment updateDoneBoardComment = boardCommentRepository.findById(updateBoardCommentId).get().updateBoardComment(updateBoardComment);
+        BoardComment updateDoneBoardComment = boardCommentRepository.findById(updateBoardComment.getId()).get().updateBoardComment(updateBoardComment);
 
         //then
         assertEquals(updateDoneBoardComment.getContents(), updateBoardComment.getContents());
