@@ -98,8 +98,8 @@
                             </div>
                             <div class="modal-body">
                                 <form id="commentDeleteCheckForm">
-                                    <input th:value="${boardCommentList.boardCommentPassword}">
-                                    <input id="deleteBoardCommentId" th:value="${boardCommentList.boardCommentId}">
+                                    <input hidden id="deleteBoardCommentId" th:value="${boardCommentList.boardCommentId}">
+                                    <input hidden th:value="${boardCommentList.boardCommentPassword}">
                                     <input id="deleteBoardCommentPassword">
                                 </form>
                             </div>
