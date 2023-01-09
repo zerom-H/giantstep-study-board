@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <style>
         .container {
             max-width: 560px;
@@ -76,12 +77,55 @@
 
     <div th:name="comment">
         <div th:each="boardCommentList : ${boardOneDetail.boardCommentListDtos}">
-            <a th:text="${boardCommentList.boardCommentWriter}"></a>
-            <a th:text="${boardCommentList.boardCommentUpdateDate}"></a>
-            <button > 수정</button>
-            <button > 삭제</button>
-            <br>
-            <a th:text="${boardCommentList.boardCommentContents}"></a>
+            <div name="boardCommentListView">
+                <a th:text="${boardCommentList.boardCommentId}"></a>
+                <a th:text="${boardCommentList.boardCommentWriter}"></a>
+                <a th:text="${boardCommentList.boardCommentUpdateDate}"></a>
+                <input hidden th:value="${boardCommentList.boardCommentPassword}" id="boardCommentPassword" >
+
+                <button type="button" data-bs-toggle="collapse"
+                        th:attr="data-bs-target=|#c${boardCommentList.boardCommentId}"> 수정</button>
+                <!-- Button trigger modal -->
+                <button type="button" data-bs-toggle="modal"
+                        th:attr="data-bs-target=|#c${boardCommentList.boardCommentId}"> 삭제 </button>
+
+                <!-- 댓글 삭제 Modal 시작 -->
+                <div class="modal fade" th:id="c + ${boardCommentList.boardCommentId}" tabindex="-1" role="dialog" aria-labelledby="modalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalCenterTitle">삭제할 댓글 비밀번호를 정확히 입력하세요.</h5>
+                            </div>
+                            <div class="modal-body">
+                                <form id="commentDeleteCheckForm">
+                                    <input hidden id="deleteBoardCommentId" th:value="${boardCommentList.boardCommentId}">
+                                    <input hidden th:value="${boardCommentList.boardCommentPassword}">
+                                    <input id="deleteBoardCommentPassword">
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary waves-effect wave-light" data-dismiss="modal" >취소하기</button>
+                                <button type="button" onclick="commentDeleteDone()" class="btn btn-danger waves-effect wave-light">삭제하기</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 댓글 삭제 Modal 끝 -->
+
+                <br>
+                <a class="collapse show" th:id="c + ${boardCommentList.boardCommentId}" th:text="${boardCommentList.boardCommentContents}"></a>
+                <br>
+            </div>
+
+            <div name="boardCommentUpdateForm" class="collapse" th:id="c + ${boardCommentList.boardCommentId}">
+                <form id="updateBoardCommentForm" th:object="${boardCommentUpdateForm}" >
+
+                    <input hidden th:value="${boardCommentList.boardCommentId}" name="updateBoardCommentID">
+                    <input name="boardCommentContents" th:value="${boardCommentList.boardCommentContents}" id="updateBoardCommentContents" >
+                    <input th:field="*{boardCommentPassword}" id="updateBoardCommentPassword" placeholder="비밀번호 입력하세요" >
+                    <button onclick="commentUpdateDone()">완료</button>
+                </form>
+            </div>
             <hr>
         </div>
 
@@ -115,13 +159,13 @@
         <div th:name="commentAddForm">
             <form id="commentAddForm" th:object="${boardComment}">
 
-                <input id="boardCommentWriter" th:type="text" th:field="*{boardCommentWriter}" placeholder="이름">
+                <input id="addBoardCommentWriter" th:type="text" th:field="*{addBoardCommentWriter}" placeholder="이름">
 
-                <input id="boardCommentPassword" type="text" th:field="*{boardCommentPassword}" placeholder="비밀번호 입력하세요">
+                <input id="addBoardCommentPassword" type="text" th:field="*{addBoardCommentPassword}" placeholder="비밀번호 입력하세요">
 
                 <br>
 
-                <textarea id="boardCommentContents" type="text" th:field="*{boardCommentContents}"  placeholder="내용을 입력하세요."></textarea>
+                <textarea id="addBoardCommentContents" type="text" th:field="*{addBoardCommentContents}"  placeholder="내용을 입력하세요."></textarea>
 
                 <button onclick="commentAddDone()">댓글 작성하기</button>
             </form>
@@ -129,27 +173,30 @@
     </div>
 
     <script type="text/javascript">
+
+        const boardCommentPassword = document.getElementById('boardCommentPassword').value;
+
         function commentAddDone() {
             const data = {
-                boardCommentWriter: document.getElementById('boardCommentWriter').value,
-                boardCommentPassword: document.getElementById('boardCommentPassword').value,
-                boardCommentContents: document.getElementById('boardCommentContents').value
+                addBoardCommentWriter: document.getElementById('addBoardCommentWriter').value,
+                addBoardCommentPassword: document.getElementById('addBoardCommentPassword').value,
+                addBoardCommentContents: document.getElementById('addBoardCommentContents').value
             }
             const regExp = /^[0-9]{4}/;
             // 댓글 유효성 검사
-            if (!data.boardCommentWriter || data.boardCommentWriter.trim() === "") {
+            if (!data.addBoardCommentWriter || data.addBoardCommentWriter.trim() === "") {
                 alert("작성자는 공백일 수 없습니다!");
                 return false;
             }
-            else if (!data.boardCommentPassword || data.boardCommentPassword.trim() === "") {
+            else if (!data.addBoardCommentPassword || data.addBoardCommentPassword.trim() === "") {
                 alert("비밀번호는 공백일 수 없습니다!");
                 return false;
             }
-            else if (!regExp.test(data.boardCommentPassword)){
+            else if (!regExp.test(data.addBoardCommentPassword)){
                 alert("비밀번호 형식은 숫자 4자리 입니다. ");
                 return false;
             }
-            else if (!data.boardCommentContents || data.boardCommentContents.trim() === "") {
+            else if (!data.addBoardCommentContents || data.addBoardCommentContents.trim() === "") {
                 alert("내용은 공백일 수 없습니다!");
                 return false;
             }
@@ -158,6 +205,48 @@
             document.getElementById('commentAddForm').action = 'commentAdd';
             document.getElementById('commentAddForm').submit();
         };
+
+        function commentUpdateDone() {
+            const data = {
+                updateBoardCommentContents: document.getElementById('updateBoardCommentContents').value,
+                updateBoardCommentPassword: document.getElementById('updateBoardCommentPassword').value
+            }
+            //댓글 수정 폼 유효성 검사
+            if (data.updateBoardCommentContents == null || data.updateBoardCommentContents.trim()===''){
+                alert("수정할 댓글 내용은 공백일 수 없습니다!");
+                return false;
+            }
+            else if (data.updateBoardCommentPassword.trim()===''){
+                alert("비밀번호는 공백일 수 없습니다!");
+                return false;
+            }
+            else if (!(data.updateBoardCommentPassword === boardCommentPassword) ){
+                alert("비밀번호가 일치하지 않습니다. 다시 확인하세요!");
+                return false;
+            }
+
+            document.getElementById('updateBoardCommentForm').method = 'POST';
+            document.getElementById('updateBoardCommentForm').action = 'updateBoardComment';
+            document.getElementById('updateBoardCommentForm').submit();
+        };
+
+        function commentDeleteDone() {
+            const deleteBoardCommentPassword = document.getElementById('deleteBoardCommentPassword').value;
+
+            //댓글 삭제 비밀번호 유효성 검사
+            if (deleteBoardCommentPassword.trim()===''){
+                alert("비밀번호가 공백일 수 없습니다!");
+                return false;
+            }
+            if ( !(deleteBoardCommentPassword === boardCommentPassword) ){
+                alert("비밀번호가 틀립니다. 다시 확인하세요!");
+                return false;
+            }
+            const deleteBoardCommentId = document.getElementById('deleteBoardCommentId').value;
+            document.getElementById('commentDeleteCheckForm').method = 'POST';
+            document.getElementById('commentDeleteCheckForm').action = deleteBoardCommentId;
+            document.getElementById('commentDeleteCheckForm').submit();
+        }
 
     </script>
 

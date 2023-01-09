@@ -8,6 +8,8 @@ import com.giantstep.board.domain.board.repository.comment.BoardCommentRepositor
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 @RequiredArgsConstructor
 public class BoardCommentService {
@@ -23,5 +25,15 @@ public class BoardCommentService {
         Long saveBoardCommentId = boardCommentRepository.save(boardComment).getId();
 
         return saveBoardCommentId;
+    }
+
+    @Transactional
+    public Long updateBoardComment(BoardComment updateBoardComment) {
+        return boardCommentRepository.findById(updateBoardComment.getId()).get().updateBoardComment(updateBoardComment).getId();
+    }
+
+    @Transactional
+    public void deleteBoardComment(Long boardCommentId) {
+        boardCommentRepository.findById(boardCommentId).get().deleteBoardComment();
     }
 }

@@ -9,17 +9,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BoardCommentAddFormDto {
 
-    private String boardCommentWriter;
-    private String boardCommentPassword;
-    private String boardCommentContents;
+    private String addBoardCommentWriter;
+    private String addBoardCommentPassword;
+    private String addBoardCommentContents;
     private Board board;
 
     public BoardComment toEntity() {
         BoardComment boardComment = BoardComment.createBoardComment()
-                .boardCommentWriter(boardCommentWriter)
-                .boardCommentContents(boardCommentContents)
-                .boardCommentPassword(boardCommentPassword)
+                .boardCommentWriter(addBoardCommentWriter)
+                .boardCommentContents(addBoardCommentContents)
+                .boardCommentPassword(addBoardCommentPassword)
                 .board(board)
+                .deletedYn("N")
                 .build();
         return boardComment;
     }

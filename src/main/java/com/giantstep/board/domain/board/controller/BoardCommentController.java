@@ -1,6 +1,7 @@
 package com.giantstep.board.domain.board.controller;
 
 import com.giantstep.board.domain.board.dto.comment.BoardCommentAddFormDto;
+import com.giantstep.board.domain.board.dto.comment.BoardCommentUpdateFormDto;
 import com.giantstep.board.domain.board.service.BoardCommentService;
 import com.giantstep.board.utils.UtilsMethod;
 import lombok.RequiredArgsConstructor;
@@ -25,5 +26,18 @@ public class BoardCommentController extends UtilsMethod {
                                  @ModelAttribute("boardComment")BoardCommentAddFormDto boardCommentAddFormDto){
         boardCommentService.saveBoardComment(boardId, boardCommentAddFormDto);
         return showMessageAndRedirectUri("댓글이 성공적으로 등록되었습니다.", "detail", model);
+    }
+
+    @PostMapping("{boardId}/updateBoardComment")
+    public String commentUpdateDone(@PathVariable("boardId") Long boardId,
+                                    @ModelAttribute("boardCommentUpdateForm")BoardCommentUpdateFormDto boardCommentUpdateFormDto) {
+        boardCommentService.updateBoardComment(boardCommentUpdateFormDto.toEntity());
+        return "redirect:detail";
+    }
+
+    @PostMapping("{boardId}/{boardCommentId}")
+    public String commentDeleteDone(@PathVariable("boardId") Long boardId, @PathVariable("boardCommentId") Long boardCommentId) {
+        boardCommentService.deleteBoardComment(boardCommentId);
+        return "redirect:detail";
     }
 }

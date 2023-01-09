@@ -12,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -98,13 +100,15 @@ class BoardServiceTest {
     }
 
     @Test
-    void 게시물_검색() {
+    void 게시물_키워드_기간_검색() {
 
         //give
         Pageable pageable = PageRequest.of(0, 10);
         BoardSearchCondition boardSearchCondition = new BoardSearchCondition();
         boardSearchCondition.setWriter("리정준");
         boardSearchCondition.setSize(5);
+        boardSearchCondition.setStartDate(LocalDate.of(2022, 10, 2));
+        boardSearchCondition.setEndDate(LocalDate.now());
 
         pageable = PageRequest.of(pageable.getPageNumber(), boardSearchCondition.getSize());
 
